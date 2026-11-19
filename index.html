@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analogue Touch · la régie</title>
+<meta name="theme-color" content="#120E0C">
+<link rel="icon" href="assets/icone-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="assets/icone-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="assets/icone-180.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Analogue Touch">
+<meta property="og:description" content="Des plugins gratuits refaits d'après des machines analogiques, avec l'IA. Bêta.">
+<meta property="og:image" content="https://analogue-touch.github.io/assets/carte-partage.png">
+<meta property="og:url" content="https://analogue-touch.github.io/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Des plugins gratuits refaits d'après des machines analogiques, avec l'IA. Bêta.">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&amp;family=Silkscreen&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#120E0C}
+.zone{position:absolute;display:block;pointer-events:none;outline:3px dashed rgba(243,230,200,0);outline-offset:4px}
+.zone:focus-visible{outline-color:rgba(243,230,200,0.9)}
+.forme{position:absolute;inset:0;pointer-events:auto;cursor:pointer;background-color:rgba(0,0,0,0);mix-blend-mode:screen;transition:background-color .15s}
+.zone:hover .forme,.zone:focus-visible .forme{background-color:#5A4020}
+.zone[aria-disabled="true"] .forme{cursor:default}
+.etiquette{position:absolute;left:50%;bottom:calc(100% + 12px);transform:translateX(-50%) rotate(-1.5deg);opacity:0;pointer-events:none;white-space:nowrap;padding:7px 14px 6px;font-family:'Silkscreen',monospace;font-size:16px;color:#1F1D1A;background:linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.97);clip-path:polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%);transition:opacity .15s}
+.zone:hover .etiquette,.zone:focus-visible .etiquette{opacity:1}
+.zone.dessous .etiquette{bottom:auto;top:calc(100% + 12px)}
+button.zone{border:0;padding:0;margin:0;background:none;font:inherit;color:inherit}
+.zone.sonne .forme{background-color:#5A4020}
+.zone.doux:hover .forme,.zone.doux:focus-visible .forme,.zone.doux.sonne .forme,.zone.doux[data-choisie] .forme{background-color:#2E2010}
+.cache{visibility:hidden}
+.niveau{position:absolute;left:408.0px;top:204.0px;width:895.5px;height:336.0px;background:url(assets/niveau.webp) 0 0/7164.0px 336.0px no-repeat;image-rendering:pixelated;pointer-events:none;visibility:hidden}
+.niveau.joue{visibility:visible}
+.bobines{position:absolute;left:1168.5px;top:253.5px;width:111.0px;height:79.5px;background:url(assets/bobines.webp) 0 0/666.0px 79.5px no-repeat;image-rendering:pixelated;pointer-events:none;visibility:hidden}
+.bobines.joue{visibility:visible;animation:bobines .6s steps(6) infinite}
+@keyframes bobines{to{background-position:-666.0px 0}}
+.trajet{position:absolute;left:0;top:0;width:1440px;height:810px;background-position:-1440px 0;background-size:8640px 4050px;background-repeat:no-repeat;image-rendering:pixelated;pointer-events:none;visibility:hidden}
+.trajet.visible{visibility:visible}
+.trajet.gm{background-image:url(assets/trajet-gm.webp)}
+.trajet.rm{background-image:url(assets/trajet-rm.webp)}
+.trajet.carnet{background-image:url(assets/trajet-carnet.webp)}
+.enlecture{position:absolute;left:50%;top:22px;margin:0;transform:translateX(-50%) rotate(1deg);padding:7px 14px 6px;white-space:nowrap;font-family:'Silkscreen',monospace;font-size:16px;color:#1F1D1A;opacity:0;transition:opacity .2s;background:linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.97);clip-path:polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%)}
+.enlecture.joue{opacity:1}
+.presentation{position:absolute;inset:0;visibility:hidden;opacity:0;transition:opacity .2s,visibility 0s linear .2s}
+.presentation.visible{visibility:visible;opacity:1;transition:opacity .25s,visibility 0s}
+.presentation:focus{outline:none}
+.boitier{position:absolute;background:#141312;box-shadow:inset 0 0 0 3px #2A2826}
+.facade{position:absolute;display:block;padding:0;margin:0;border:0;background:none;cursor:pointer}
+.facade img{display:block;width:100%;height:100%}
+.facade::after{content:'';position:absolute;inset:0;background-color:rgba(0,0,0,0);mix-blend-mode:screen;pointer-events:none;transition:background-color .15s}
+.facade:hover::after,.facade:focus-visible::after{background-color:#3A2A14}
+.facade.sonne::after{background-color:#6A4A1E;opacity:calc(0.2 + var(--niv, 0.5) * 0.8)}
+.facade:focus-visible{outline:3px dashed rgba(243,230,200,0.9);outline-offset:6px}
+.actions{position:absolute;left:0;right:0;bottom:24px;display:flex;justify-content:center;align-items:center;gap:28px}
+.scotch{--r:-1.5deg;display:inline-block;margin:0;padding:10px 18px 9px;font-family:'Silkscreen',monospace;font-size:16px;line-height:1;color:#1F1D1A;text-decoration:none;border:0;cursor:pointer;transform:rotate(var(--r));transition:transform .15s;background:linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.97);clip-path:polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%)}
+.scotch:nth-child(2n){--r:1.2deg}
+.scotch:hover{transform:rotate(0deg) translateY(-2px)}
+.scotch:focus-visible{outline:none;background-color:#F3E6C8;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+.numero{--r:4deg;position:absolute;cursor:default}
+.presentation.visible .facade img{animation:allumage .5s steps(5) backwards}
+.presentation.visible .actions .scotch{animation:poser .34s cubic-bezier(.16,1,.3,1) backwards}
+.presentation.visible .actions .scotch:nth-child(1){animation-delay:.28s}
+.presentation.visible .actions .scotch:nth-child(2){animation-delay:.36s}
+.presentation.visible .actions .scotch:nth-child(3){animation-delay:.44s}
+.presentation.visible .actions .scotch:nth-child(4){animation-delay:.52s}
+.presentation.visible .numero{animation:poser .34s cubic-bezier(.16,1,.3,1) .62s backwards}
+@keyframes allumage{from{filter:brightness(.12) saturate(.2)}to{filter:brightness(1) saturate(1)}}
+@keyframes poser{from{opacity:0;transform:translateY(-18px) rotate(calc(var(--r) * 5)) scale(1.12)}to{opacity:1;transform:rotate(var(--r))}}
+.carnet{position:absolute;inset:0;visibility:hidden;opacity:0;transition:opacity .2s,visibility 0s linear .2s}
+.carnet.visible{visibility:visible;opacity:1;transition:opacity .25s,visibility 0s}
+.carnet:focus{outline:none}
+.feuilles{position:absolute;background:linear-gradient(90deg,#F3E6C8 0,#F3E6C8 50%,#EDE0C0 50%,#EDE0C0 100%)}
+.feuilles::after{content:'';position:absolute;left:calc(50% - 2px);top:0;bottom:0;width:3px;background:#B8A888;pointer-events:none}
+.double{display:none;position:absolute;inset:0;grid-template-columns:1fr 1fr}
+.double.ouverte{display:grid}
+.page{position:relative;box-sizing:border-box;padding:58px 46px 48px 58px;color:#2E2622;font-family:'Kalam',cursive;font-size:21px;line-height:36px;background-image:repeating-linear-gradient(180deg,rgba(0,0,0,0) 0,rgba(0,0,0,0) 34px,rgba(120,96,60,0.2) 34px,rgba(120,96,60,0.2) 36px);background-position:0 22px}
+.page.gauche{background-color:#F3E6C8}
+.page.droite{padding-left:52px;background-color:#EDE0C0}
+.page h2{margin:0 0 18px;font-family:'Silkscreen',monospace;font-weight:400;font-size:24px;line-height:36px;color:#1F1D1A}
+.page h3{margin:18px 0 0;font-family:'Silkscreen',monospace;font-weight:400;font-size:16px;line-height:36px;color:#1F1D1A}
+.page p,.page ol,.page ul{margin:0 0 12px}
+.page ol,.page ul{padding-left:28px}
+.page li{margin:0 0 6px;padding-left:4px}
+.page ol li::marker{font-weight:700}
+.page ul.journal{list-style:none;padding-left:0}
+.page ul.journal li{padding-left:0}
+.page .date{font-family:'Silkscreen',monospace;font-size:16px;color:#5E5850;margin-right:8px}
+.page a,.page .lien{color:#9A3A16;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px;background:none;border:0;padding:0;font:inherit;cursor:pointer;text-align:left}
+.page a:focus-visible,.page .lien:focus-visible{outline:2px dashed #9A3A16;outline-offset:3px}
+.page .note{color:#5E5850}
+.page .signature{margin-top:22px;font-weight:700}
+.page .chemin{display:inline-block;white-space:nowrap;margin:6px 0 4px;padding:5px 12px 4px;font-family:Consolas,'Cascadia Mono','Courier New',monospace;font-size:16px;line-height:24px;color:#1F1D1A;transform:rotate(-0.8deg);background:linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.97);clip-path:polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%)}
+.page .folio{position:absolute;bottom:14px;font-family:'Silkscreen',monospace;font-size:16px;line-height:24px;color:#665A50}
+.page.gauche .folio{left:24px}
+.page.droite .folio{right:24px}
+.page .sommaire{list-style:none;padding-left:0}
+.page .sommaire li{display:flex;justify-content:space-between;gap:12px}
+.page .sommaire .folio-lien{font-family:'Silkscreen',monospace;font-size:16px;color:#665A50}
+.carnet.visible .double.ouverte .page > *{animation:encre .55s steps(11) backwards}
+.carnet.visible .double.ouverte .page > :nth-child(2){animation-delay:.12s}
+.carnet.visible .double.ouverte .page > :nth-child(3){animation-delay:.24s}
+.carnet.visible .double.ouverte .page > :nth-child(4){animation-delay:.36s}
+.carnet.visible .double.ouverte .page > :nth-child(5){animation-delay:.48s}
+.carnet.visible .double.ouverte .page > :nth-child(n+6){animation-delay:.6s}
+.carnet.visible .double.ouverte .page.droite > *{animation-delay:.3s}
+.carnet.visible .double.ouverte .page > .folio{animation:none}
+@keyframes encre{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.onglets{position:absolute;display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.onglet{--r:-1deg;margin:0;padding:10px 18px 9px 26px;font-family:'Silkscreen',monospace;font-size:16px;line-height:1;color:#1F1D1A;border:0;cursor:pointer;transform:rotate(var(--r));transition:transform .15s;background:linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.97);clip-path:polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%)}
+.onglet:nth-child(2n){--r:1deg}
+.onglet:hover{transform:translateX(6px) rotate(var(--r))}
+.onglet.actif{transform:translateX(14px) rotate(var(--r));background-color:#F3E6C8}
+.onglet:focus-visible{outline:none;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+.carnet .retour{position:absolute;right:28px;bottom:24px}
+@media (prefers-reduced-motion: reduce){.forme,.etiquette,.enlecture,.presentation,.carnet,.scotch,.onglet,.facade::after{transition:none}.bobines.joue,.presentation.visible .facade img,.presentation.visible .scotch,.carnet.visible .double.ouverte .page > *{animation:none}}
+</style>
+<link rel="preload" as="image" href="assets/trajet-gm.webp">
+<link rel="preload" as="image" href="assets/trajet-rm.webp">
+<link rel="preload" as="image" href="assets/trajet-carnet.webp">
+<style>
+html,body{height:100%;overflow:hidden}
+.defile{position:fixed;inset:0;overflow:hidden}
+.plateau{position:absolute;inset:0}
+.ecran{position:absolute;left:50%;top:50%;width:1440px;height:810px;transform:translate(-50%,-50%) scale(var(--k,1))}
+.logo-mobile,.glisse{display:none}
+/* ── Le téléphone tenu debout ──
+   La régie : on la voit sur toute la hauteur et on la fait glisser pour regarder autour.
+   Une machine ou le carnet : la page passe en colonne, la façade sur toute la largeur. */
+@media (max-aspect-ratio: 1/1){
+  .defile{overflow-x:auto;overflow-y:hidden;scrollbar-width:none;overscroll-behavior:contain}
+  .defile::-webkit-scrollbar{display:none}
+  .plateau{right:auto;bottom:auto;top:calc(50% - 405px * var(--k,1));height:calc(810px * var(--k,1));width:calc(1440px * var(--k,1))}
+  .ecran{left:0;top:0;transform:scale(var(--k,1));transform-origin:0 0}
+  .ecran > div > a[aria-label="Analogue Touch, accueil"]{display:none !important}
+  .logo-mobile{display:block;position:fixed !important;left:10px !important;top:10px !important;z-index:5}
+  .glisse{display:block;position:fixed;left:50%;bottom:22px;z-index:5;margin:0;transform:translateX(-50%) rotate(-1deg);transition:opacity .4s}
+  .glisse.vu,.defile.fiche ~ .glisse{opacity:0;pointer-events:none}
+  .zone[data-choisie] .etiquette{opacity:1}
+  .zone[data-choisie] .forme{background-color:#5A4020}
+  .defile.fiche{overflow-x:hidden;overflow-y:auto}
+  .defile.fiche .plateau{position:relative;top:auto;width:100%;height:auto}
+  .defile.fiche .ecran{position:relative;transform:none;width:100%;height:auto;min-height:100vh}
+  .defile.fiche .ecran > div{width:auto !important;height:auto !important;min-height:100vh;overflow:visible !important}
+  .defile.fiche .ecran > div > img,.defile.fiche .niveau,.defile.fiche .bobines,.defile.fiche .trajet,.defile.fiche nav[aria-label="La régie"]{display:none !important}
+  .defile.fiche .presentation,.defile.fiche .carnet{display:none}
+  .defile.fiche .presentation.visible,.defile.fiche .carnet.visible{position:relative;inset:auto;display:flex;flex-direction:column;align-items:stretch;gap:22px;padding:86px 16px 48px;box-sizing:border-box}
+  .defile.fiche .boitier{display:none}
+  .defile.fiche .facade{position:relative;left:auto !important;top:auto !important;width:100% !important;height:auto !important;box-shadow:0 0 0 6px #141312,0 0 0 9px #2A2826;margin:9px 0}
+  .defile.fiche .facade img{height:auto}
+  .defile.fiche .numero{position:relative;left:auto !important;top:auto !important;align-self:flex-start}
+  .defile.fiche .actions{position:static;flex-direction:column;align-items:stretch;gap:14px}
+  .defile.fiche .actions .scotch{text-align:center;padding:15px 18px 14px}
+  .defile.fiche .actions .scotch:first-child{order:4}
+  .defile.fiche .feuilles{position:relative;left:auto !important;top:auto !important;width:auto !important;height:auto !important;background:none}
+  .defile.fiche .feuilles::after{display:none}
+  .defile.fiche .double.ouverte{position:static;display:flex;flex-direction:column;gap:14px}
+  .defile.fiche .page{padding:42px 22px 48px 26px;background-color:#F3E6C8}
+  .defile.fiche .page.droite{padding-left:26px;background-color:#EDE0C0}
+  .defile.fiche .page h2{font-size:16px;line-height:36px}
+  .defile.fiche .page .chemin{white-space:normal;overflow-wrap:anywhere;font-size:14px}
+  .defile.fiche .onglets{position:static;left:auto !important;top:auto !important;flex-direction:row;flex-wrap:wrap;gap:10px;order:-1}
+  .defile.fiche .onglet{padding:12px 14px 11px}
+  .defile.fiche .onglet.actif,.defile.fiche .onglet:hover{transform:rotate(var(--r)) translateY(3px)}
+  .defile.fiche .carnet .retour{position:static;align-self:flex-start;padding:15px 18px 14px}
+  .defile.fiche .enlecture{position:fixed;top:64px;z-index:5}
+}
+</style>
+</head>
+<body>
+<noscript><p class="scotch" style="position:fixed;left:16px;right:16px;top:40%;z-index:9;text-align:center">LA RÉGIE A BESOIN DE JAVASCRIPT. LE CODE EST SUR GITHUB.COM/ANALOGUE-TOUCH</p></noscript>
+<div class="defile" id="defile">
+<div class="plateau">
+<main class="ecran {{ classeVue }}" id="ecran">
+<div style="position: relative; width: 1440px; height: 810px; overflow: hidden; background: #120E0C">
+  <img src="assets/regie.webp" alt="La régie d'Analogue Touch, disposée en U : au fond un mur de briques et deux grandes enceintes, devant lui la console à seize voies dans un meuble plein avec deux baies de rack ; à gauche deux synthés sur un pied tourné vers la console ; à droite un rack studio avec Six-Trente en haut, un magnétophone à bobines posé dessus et un casque accroché ; au premier plan le fauteuil et une desserte avec un carnet et un pot à pourboires." width="1440" height="810" style="display: block; width: 1440px; height: 810px; image-rendering: pixelated">
+  <div class="niveau {{ classeLecture }}" ref="{{ poserNiveau }}" aria-hidden="true"></div>
+  <div class="bobines {{ classeLecture }}" aria-hidden="true"></div>
+  <div class="trajet {{ classeTrajet }}" ref="{{ poserTrajet }}" aria-hidden="true"></div>
+  <p class="enlecture {{ classeTitre }}" role="status">{{ titreLecture }}</p>
+
+  <a href="./" aria-label="Analogue Touch, accueil" style="position: absolute; left: 24px; top: 20px; display: block; padding: 8px 14px; transform: rotate(-1deg); background: linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.94); clip-path: polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%)">
+    <svg aria-hidden="true" viewBox="-24 -18 236 36" shape-rendering="crispEdges" style="display: block; width: 236px; height: 36px">
+      <path fill="#1F1D1A" d="M-1 -16h2v1h-2zM-2 -15h3v1h-3zM-3 -14h4v1h-4zM-4 -13h2v1h-2zM-1 -13h2v1h-2zM-5 -12h2v1h-2zM-1 -12h2v1h-2zM-6 -11h2v1h-2zM-1 -11h2v1h-2zM-7 -10h2v1h-2zM-1 -10h2v1h-2zM-8 -9h24v1h-24zM-9 -8h25v1h-25zM-10 -7h2v1h-2zM-1 -7h2v1h-2zM7 -7h2v1h-2zM-11 -6h2v1h-2zM-1 -6h2v1h-2zM7 -6h2v1h-2zM-12 -5h2v1h-2zM-1 -5h2v1h-2zM7 -5h2v1h-2zM-13 -4h2v1h-2zM-1 -4h2v1h-2zM7 -4h2v1h-2zM-14 -3h2v1h-2zM-1 -3h2v1h-2zM7 -3h2v1h-2zM-15 -2h2v1h-2zM-1 -2h2v1h-2zM7 -2h2v1h-2zM-48 -1h34v1h-34zM-1 -1h2v1h-2zM7 -1h2v1h-2zM15 -1h33v1h-33zM-48 0h33v1h-33zM-1 0h2v1h-2zM7 0h2v1h-2zM15 0h33v1h-33zM-1 1h2v1h-2zM7 1h2v1h-2zM14 1h2v1h-2zM-1 2h2v1h-2zM7 2h2v1h-2zM13 2h2v1h-2zM-1 3h2v1h-2zM7 3h2v1h-2zM12 3h2v1h-2zM-1 4h2v1h-2zM7 4h2v1h-2zM11 4h2v1h-2zM-1 5h2v1h-2zM7 5h2v1h-2zM10 5h2v1h-2zM-1 6h2v1h-2zM7 6h4v1h-4zM-1 7h2v1h-2zM7 7h3v1h-3zM-1 8h2v1h-2zM7 8h2v1h-2zM-1 9h2v1h-2zM6 9h2v1h-2zM-1 10h2v1h-2zM5 10h2v1h-2zM-1 11h2v1h-2zM4 11h2v1h-2zM-1 12h2v1h-2zM3 12h2v1h-2zM-1 13h2v1h-2zM2 13h2v1h-2zM-1 14h4v1h-4zM-1 15h3v1h-3z"></path>
+      <rect x="48" y="-1" width="160" height="2" fill="#1F1D1A"></rect>
+      <text x="26" y="-3" font-family="Silkscreen, monospace" font-size="16" fill="#1F1D1A">ANALOGUE TOUCH</text>
+    </svg>
+  </a>
+
+  <nav aria-label="La régie" class="{{ classeRegie }}">
+    <button type="button" class="zone doux" onClick="{{ basculerEcoute }}" aria-pressed="{{ ecoutePresse }}" aria-label="Écouter la bande démo" style="left: 393px; top: 147px; width: 654px; height: 154px"><span class="forme" style="clip-path: path('M1 1 L90 1 L90 153 L1 153 Z M564 1 L653 1 L653 153 L564 153 Z')"></span><span class="etiquette" aria-hidden="true">{{ etiquetteEcoute }}</span></button>
+    <a href="#" class="zone" aria-disabled="true" style="left: 418px; top: 305px; width: 604px; height: 115px"><span class="forme" style="clip-path: path('M58 1 L546 1 L546 31 L58 31 Z M11 113 L593 113 L548 32 L56 32 Z M0 115 L604 115 L598 113 L6 113 Z')"></span><span class="etiquette">LA CONSOLE · BIENTÔT</span></a>
+    <button type="button" class="zone" onClick="{{ basculerEcoute }}" aria-pressed="{{ ecoutePresse }}" aria-label="Écouter la bande démo" style="left: 1141px; top: 249px; width: 203px; height: 155px"><span class="forme" style="clip-path: path('M9 8 L162 13 L153 154 L1 125 Z M153 154 L162 13 L202 12 L202 148 Z M9 8 L162 13 L202 12 L47 8 Z M143 47 L141 57 L136 66 L130 74 L122 81 L113 85 L103 87 L93 87 L84 84 L75 80 L68 74 L62 67 L57 59 L55 50 L54 41 L56 32 L60 23 L65 16 L72 9 L80 5 L89 2 L99 1 L109 2 L118 6 L127 11 L134 18 L139 27 L142 37 Z')"></span><span class="etiquette" aria-hidden="true">{{ etiquetteEcoute }}</span></button>
+    <a href="#" class="zone" aria-disabled="true" style="left: 1086px; top: 406px; width: 227px; height: 123px"><span class="forme" style="clip-path: path('M1 0 L227 57 L227 122 L1 49 Z')"></span><span class="etiquette">BIENTÔT</span></a>
+    <a href="#" class="zone" aria-disabled="true" style="left: 1086px; top: 374px; width: 227px; height: 86px"><span class="forme" style="clip-path: path('M1 0 L227 47 L227 86 L1 29 Z')"></span><span class="etiquette">SIX‑TRENTE · BIENTÔT</span></a>
+    <a href="#" class="zone dessous" aria-disabled="true" style="left: 1086px; top: 457px; width: 227px; height: 134px"><span class="forme" style="clip-path: path('M1 0 L227 75 L227 133 L1 44 Z')"></span><span class="etiquette">BIENTÔT</span></a>
+    <button type="button" class="zone {{ sonneGm }}" onClick="{{ allerGm }}" ref="{{ poserZoneGm }}" aria-label="Grand-mère" style="left: 28px; top: 296px; width: 248px; height: 101px"><span class="forme" style="clip-path: path('M0 16 L198 0 L248 67 L53 100 Z')"></span><span class="etiquette" aria-hidden="true">GRAND‑MÈRE →</span></button>
+    <button type="button" class="zone dessous {{ sonneRm }}" onClick="{{ allerRm }}" ref="{{ poserZoneRm }}" aria-label="Reine Mère" style="left: 34px; top: 384px; width: 304px; height: 114px"><span class="forme" style="clip-path: path('M1 49 L246 0 L303 46 L65 113 Z')"></span><span class="etiquette" aria-hidden="true">REINE MÈRE →</span></button>
+    <a href="#" class="zone dessous" aria-disabled="true" style="left: 94px; top: 472px; width: 277px; height: 121px"><span class="forme" style="clip-path: path('M1 75 L116 36 L174 48 L62 91 Z M62 91 L174 48 L174 75 L62 121 Z M135 30 L221 1 L276 10 L194 41 Z M194 41 L276 10 L276 33 L194 67 Z')"></span><span class="etiquette">HUIT · NEUF · BIENTÔT</span></a>
+    <button type="button" class="zone" onClick="{{ allerCarnet }}" ref="{{ poserZoneCarnet }}" aria-label="Le carnet de travail" style="left: 894px; top: 598px; width: 148px; height: 47px"><span class="forme" style="clip-path: path('M22 46 L148 46 L112 1 L0 1 Z')"></span><span class="etiquette" aria-hidden="true">LE CARNET DE TRAVAIL</span></button>
+    <button type="button" class="zone" onClick="{{ allerPourboire }}" aria-label="Laisser un pourboire" style="left: 990px; top: 526px; width: 89px; height: 115px"><span class="forme" style="clip-path: path('M1 1 L88 1 L88 114 L1 114 Z')"></span><span class="etiquette" aria-hidden="true">POURBOIRE</span></button>
+  </nav>
+
+  <section class="presentation {{ classePresGm }}" aria-label="Grand-mère" tabIndex="-1" ref="{{ poserPresentationGm }}">
+    <div class="boitier" aria-hidden="true" style="left: 173px; top: 64px; width: 1094px; height: 640px"></div>
+    <button type="button" class="facade {{ classeFacadeGm }}" onClick="{{ basculerGm }}" aria-pressed="{{ presseGm }}" aria-label="Écouter Grand-mère" style="left: 195px; top: 68px; width: 1050px; height: 631px">
+      <img src="assets/facade-gm.webp" alt="" width="1050" height="631">
+    </button>
+    <p class="scotch numero" style="left: 1067px; top: 42px">N° 001 · BÊTA</p>
+    <div class="actions">
+      <button type="button" class="scotch" onClick="{{ retourRegie }}">← LA RÉGIE</button>
+      <button type="button" class="scotch" onClick="{{ basculerGm }}" aria-pressed="{{ presseGm }}">{{ etiquetteGm }}</button>
+      <a class="scotch" href="#">TÉLÉCHARGER · GRATUIT</a>
+      <button type="button" class="scotch" onClick="{{ carnetInstaller }}">LE CARNET →</button>
+    </div>
+  </section>
+  <section class="presentation {{ classePresRm }}" aria-label="Reine Mère" tabIndex="-1" ref="{{ poserPresentationRm }}">
+    <div class="boitier" aria-hidden="true" style="left: 45px; top: 69px; width: 1350px; height: 594px"></div>
+    <button type="button" class="facade {{ classeFacadeRm }}" onClick="{{ basculerRm }}" aria-pressed="{{ presseRm }}" aria-label="Écouter Reine Mère" style="left: 75px; top: 73px; width: 1290px; height: 585px">
+      <img src="assets/facade-rm.webp" alt="" width="1290" height="585">
+    </button>
+    <p class="scotch numero" style="left: 1195px; top: 47px">N° 002 · BÊTA</p>
+    <div class="actions">
+      <button type="button" class="scotch" onClick="{{ retourRegie }}">← LA RÉGIE</button>
+      <button type="button" class="scotch" onClick="{{ basculerRm }}" aria-pressed="{{ presseRm }}">{{ etiquetteRm }}</button>
+      <a class="scotch" href="#">TÉLÉCHARGER · GRATUIT</a>
+      <button type="button" class="scotch" onClick="{{ carnetInstaller }}">LE CARNET →</button>
+    </div>
+  </section>
+
+  <section class="carnet {{ classeCarnet }}" aria-label="Le carnet de travail" tabIndex="-1" ref="{{ poserCarnet }}">
+    <div class="feuilles" style="left: 211px; top: 73px; width: 1018px; height: 724px">
+      <div class="double {{ classeF0 }}">
+        <div class="page gauche">
+        <h2>LE CARNET DE TRAVAIL</h2>
+        <p>Je m'appelle Touf. Je refais en plugin, d'après leur circuit, des synthés et des machines de studio que j'aime, avec l'IA. C'est gratuit, sans compte, et tout le code est public.</p>
+        <p>Ce carnet garde tout ce qui ne tient pas sur une façade : comment les installer, comment elles sont faites, et ce qui a changé.</p>
+        <p class="signature">Fait par Touf. À écouter au casque.</p>
+        <span class="folio" aria-hidden="true">1</span></div>
+        <div class="page droite">
+        <h2>DANS CE CARNET</h2>
+        <ol class="sommaire">
+          <li><button type="button" class="lien" onClick="{{ ouvrirF1 }}">Installer, sur Windows</button><span class="folio-lien">P. 3</span></li>
+          <li><button type="button" class="lien" onClick="{{ ouvrirF2 }}">La méthode</button><span class="folio-lien">P. 5</span></li>
+          <li><button type="button" class="lien" onClick="{{ ouvrirF3 }}">Le journal</button><span class="folio-lien">P. 7</span></li>
+          <li><button type="button" class="lien" onClick="{{ ouvrirF4 }}">Soutenir</button><span class="folio-lien">P. 9</span></li>
+        </ol>
+        <p class="note">Le code et les mesures sont faits avec Claude, une IA. J'écoute le son et je relis les textes. Les façades et ces pixels sont dessinés par des programmes écrits avec Claude.</p>
+        <span class="folio" aria-hidden="true">2</span></div>
+      </div>
+      <div class="double {{ classeF1 }}">
+        <div class="page gauche">
+        <h2>INSTALLER, SUR WINDOWS</h2>
+        <ol>
+          <li>Télécharge le zip de la bêta.</li>
+          <li>Dézippe-le : tu obtiens un dossier <b>Grandmere.vst3</b> ou <b>Reine Mere.vst3</b>.</li>
+          <li>Copie ce dossier entier dans :<br><span class="chemin">C:\Program Files\Common Files\VST3</span><br>Windows peut te demander d'être administrateur pour écrire dans ce dossier.</li>
+          <li>Relance la recherche de plugins dans ton logiciel de musique.</li>
+        </ol>
+        <p class="note">Sur Mac : plus tard.</p>
+        <span class="folio" aria-hidden="true">3</span></div>
+        <div class="page droite">
+        <h2>ELLE N'APPARAÎT PAS ?</h2>
+        <ul>
+          <li>Vérifie que tu as copié le dossier .vst3 entier, pas seulement ce qu'il contient.</li>
+          <li>Vérifie dans les réglages de ton logiciel qu'il cherche bien les plugins VST3 dans ce dossier.</li>
+          <li>Sinon, <a href="https://github.com/analogue-touch" target="_blank" rel="noopener">signale le problème sur GitHub ↗</a> : dis-moi ton logiciel et ta version de Windows.</li>
+        </ul>
+        <span class="folio" aria-hidden="true">4</span></div>
+      </div>
+      <div class="double {{ classeF2 }}">
+        <div class="page gauche">
+        <h2>D'APRÈS LE CIRCUIT</h2>
+        <ol>
+          <li><b>Le schéma.</b> Je pars du schéma publié et du manuel de la machine, jamais de son code.</li>
+          <li><b>Le circuit en code.</b> Chaque étage est réécrit composant par composant, avec l'IA.</li>
+          <li><b>La mesure.</b> Les rendus sont mesurés, et les chiffres sont publiés avec le code.</li>
+          <li><b>L'oreille.</b> Rien ne change dans le son sans que je l'aie écouté.</li>
+        </ol>
+        <span class="folio" aria-hidden="true">5</span></div>
+        <div class="page droite">
+        <h2>CE QU'IL FAUT SAVOIR</h2>
+        <p>Ce n'est pas un produit officiel ni une copie du code d'origine : aucun lien avec les fabricants. C'est une bêta, faite avec Claude, une IA, puis écoutée et relue par moi.</p>
+        <p><b>Ce que l'IA a coûté :</b> [jetons à relever].</p>
+        <p>Grand‑mère tourne sur 5,6 % d'un cœur de processeur à 48 kHz, mesuré le 18/11/2026.</p>
+        <p><a href="https://github.com/analogue-touch" target="_blank" rel="noopener">Le code, les mesures et les décisions sont sur GitHub ↗</a></p>
+        <span class="folio" aria-hidden="true">6</span></div>
+      </div>
+      <div class="double {{ classeF3 }}">
+        <div class="page gauche">
+        <h2>LE JOURNAL</h2>
+        <ul class="journal">
+          <li><span class="date">12/11/2026</span>La collection s'appelle Analogue Touch.</li>
+          <li><span class="date">12/11/2026</span>Les façades passent en pixel art, aux teintes d'origine. Le son ne change pas d'un bit.</li>
+          <li><span class="date">18/11/2026</span>Le logo : un seul cycle de dent de scie, qui écrit A et T.</li>
+          <li><span class="date">18/11/2026</span>Le code est public, sous licence AGPLv3.</li>
+          <li><span class="date">18/11/2026</span>Première sortie : Grand‑mère et Reine Mère, en bêta.</li>
+          <li><span class="date">19/11/2026</span>Le site devient une régie de studio.</li>
+        </ul>
+        <span class="folio" aria-hidden="true">7</span></div>
+        <div class="page droite">
+        <h2>GRAND‑MÈRE</h2>
+        <ul class="journal">
+          <li><span class="date">12/11/2026</span>Version 5 : trois changements choisis à l'oreille.</li>
+          <li><span class="date">18/11/2026</span>Coût mesuré : 5,6 % d'un cœur de processeur à 48 kHz.</li>
+        </ul>
+        <h3>REINE MÈRE</h3>
+        <ul class="journal">
+          <li><span class="date">10/11/2026</span>Version 4 : 63 réglages.</li>
+        </ul>
+        <p><a href="https://github.com/analogue-touch" target="_blank" rel="noopener">Le journal complet sur GitHub ↗</a></p>
+        <span class="folio" aria-hidden="true">8</span></div>
+      </div>
+      <div class="double {{ classeF4 }}">
+        <div class="page gauche">
+        <h2>UN POURBOIRE, PAS UN PRIX</h2>
+        <p>Les plugins sont gratuits, sans compte, et le code est public. Si tu veux m'aider à en refaire d'autres, tu peux me laisser un pourboire. Il ne débloque rien : c'est un merci.</p>
+        <p>Signaler un problème aide aussi.</p>
+        <span class="folio" aria-hidden="true">9</span></div>
+        <div class="page droite">
+        <h2>OÙ ÇA SE PASSE</h2>
+        <ul>
+          <li><a href="#">Laisser un pourboire ↗</a> sur Ko‑fi, à la page « Touf - Analogue-touch ».</li>
+          <li><a href="https://github.com/analogue-touch" target="_blank" rel="noopener">Signaler un problème ↗</a> sur GitHub.</li>
+          <li><a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener">Le code, sous licence AGPLv3 ↗</a></li>
+        </ul>
+        <p class="note">Les machines d'origine appartiennent à leurs fabricants. Aucun lien avec eux.</p>
+        <span class="folio" aria-hidden="true">10</span></div>
+      </div>
+    </div>
+    <nav class="onglets" aria-label="Les pages du carnet" style="left: 1213px; top: 113px">
+      <button type="button" class="onglet {{ classeOngletF0 }}" onClick="{{ ouvrirF0 }}" aria-current="{{ courantF0 }}">SOMMAIRE</button>
+      <button type="button" class="onglet {{ classeOngletF1 }}" onClick="{{ ouvrirF1 }}" aria-current="{{ courantF1 }}">INSTALLER</button>
+      <button type="button" class="onglet {{ classeOngletF2 }}" onClick="{{ ouvrirF2 }}" aria-current="{{ courantF2 }}">LA MÉTHODE</button>
+      <button type="button" class="onglet {{ classeOngletF3 }}" onClick="{{ ouvrirF3 }}" aria-current="{{ courantF3 }}">LE JOURNAL</button>
+      <button type="button" class="onglet {{ classeOngletF4 }}" onClick="{{ ouvrirF4 }}" aria-current="{{ courantF4 }}">SOUTENIR</button>
+    </nav>
+    <button type="button" class="scotch retour" onClick="{{ retourRegie }}">← LA RÉGIE</button>
+  </section>
+</div>
+</main>
+</div>
+</div>
+  <a class="logo-mobile" href="./" aria-label="Analogue Touch, accueil" style="position: absolute; left: 24px; top: 20px; display: block; padding: 8px 14px; transform: rotate(-1deg); background: linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.94); clip-path: polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%)">
+    <svg aria-hidden="true" viewBox="-24 -18 236 36" shape-rendering="crispEdges" style="display: block; width: 236px; height: 36px">
+      <path fill="#1F1D1A" d="M-1 -16h2v1h-2zM-2 -15h3v1h-3zM-3 -14h4v1h-4zM-4 -13h2v1h-2zM-1 -13h2v1h-2zM-5 -12h2v1h-2zM-1 -12h2v1h-2zM-6 -11h2v1h-2zM-1 -11h2v1h-2zM-7 -10h2v1h-2zM-1 -10h2v1h-2zM-8 -9h24v1h-24zM-9 -8h25v1h-25zM-10 -7h2v1h-2zM-1 -7h2v1h-2zM7 -7h2v1h-2zM-11 -6h2v1h-2zM-1 -6h2v1h-2zM7 -6h2v1h-2zM-12 -5h2v1h-2zM-1 -5h2v1h-2zM7 -5h2v1h-2zM-13 -4h2v1h-2zM-1 -4h2v1h-2zM7 -4h2v1h-2zM-14 -3h2v1h-2zM-1 -3h2v1h-2zM7 -3h2v1h-2zM-15 -2h2v1h-2zM-1 -2h2v1h-2zM7 -2h2v1h-2zM-48 -1h34v1h-34zM-1 -1h2v1h-2zM7 -1h2v1h-2zM15 -1h33v1h-33zM-48 0h33v1h-33zM-1 0h2v1h-2zM7 0h2v1h-2zM15 0h33v1h-33zM-1 1h2v1h-2zM7 1h2v1h-2zM14 1h2v1h-2zM-1 2h2v1h-2zM7 2h2v1h-2zM13 2h2v1h-2zM-1 3h2v1h-2zM7 3h2v1h-2zM12 3h2v1h-2zM-1 4h2v1h-2zM7 4h2v1h-2zM11 4h2v1h-2zM-1 5h2v1h-2zM7 5h2v1h-2zM10 5h2v1h-2zM-1 6h2v1h-2zM7 6h4v1h-4zM-1 7h2v1h-2zM7 7h3v1h-3zM-1 8h2v1h-2zM7 8h2v1h-2zM-1 9h2v1h-2zM6 9h2v1h-2zM-1 10h2v1h-2zM5 10h2v1h-2zM-1 11h2v1h-2zM4 11h2v1h-2zM-1 12h2v1h-2zM3 12h2v1h-2zM-1 13h2v1h-2zM2 13h2v1h-2zM-1 14h4v1h-4zM-1 15h3v1h-3z"></path>
+      <rect x="48" y="-1" width="160" height="2" fill="#1F1D1A"></rect>
+      <text x="26" y="-3" font-family="Silkscreen, monospace" font-size="16" fill="#1F1D1A">ANALOGUE TOUCH</text>
+    </svg>
+  </a>
+<p class="scotch glisse" id="glisse" aria-hidden="true">← GLISSE POUR REGARDER →</p>
+<script src="dc-autonome.js"></script>
+<script>
+// La régie est une seule page. Un clic sur un synthé fait avancer la caméra jusqu'à lui (des images
+// rendues d'avance par la même scène, outils/trajet-regie.py), puis sa présentation s'ouvre là, de face :
+// la façade s'allume, les scotchs se posent un par un. « La régie » refait le chemin à l'envers.
+// Planche assemblée par outils/planche-regie.py : la retoucher là, pas ici.
+//
+// La bande démo : des extraits rendus par les plugins eux-mêmes, au même niveau de crête (-6 dBFS).
+// Le niveau de chaque extrait est calculé d'avance (un chiffre de 0 à 7 toutes les 50 ms, avec la retombée
+// d'un vumètre) : la page le lit en face du temps de lecture, sans analyser le son dans le navigateur.
+const PISTES = [
+  { src: 'assets/son-gm-basse.mp4', titre: 'GRAND‑MÈRE · BASSE', machine: 'gm', niveaux: '344445554455544555445554455544555445554455544555445554455544554445554455444554443221111100' },
+  { src: 'assets/son-rm-accords.mp4', titre: 'REINE MÈRE · ACCORDS', machine: 'rm', niveaux: '35566666666666666666666666666666666666666666666666666666666665554443332222111110' },
+  { src: 'assets/son-gm-sequence.mp4', titre: 'GRAND‑MÈRE · SÉQUENCE', machine: 'gm', niveaux: '4555566566654432455543324555665555566666655555666665545555556565555455555555554555555555445555555433' },
+  { src: 'assets/son-rm-sequence.mp4', titre: 'REINE MÈRE · SÉQUENCE D’ACCORDS', machine: 'rm', niveaux: '345543555543322111103455543221454334555543221455434554344555432214554345543455554322145543455434455543221455434554344322' }
+];
+const MACHINES = { gm: [0, 2], rm: [1, 3] };
+const LARGEUR_NIVEAU = 895.5;
+// Le trajet : 30 images en grille de 6 colonnes. L'image 0 est l'accueil lui-même, qui reste dessous.
+const TRAJET = { images: 30, colonnes: 6, largeur: 1440, hauteur: 810, duree: 1150 };
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { piste: -1, vue: 'regie', feuille: 0 };
+    this.machine = 'gm';
+    this.liste = [];
+    this.rang = -1;
+    this.image = -1;
+    this.boucle = null;
+    this.voyage = null;
+    this.elPres = {};
+    this.elZone = {};
+    this.poserNiveau = (el) => { this.elNiveau = el; };
+    this.poserTrajet = (el) => { this.elTrajet = el; };
+    this.poserPresentationGm = (el) => { this.elPres.gm = el; };
+    this.poserZoneGm = (el) => { this.elZone.gm = el; };
+    this.basculerGm = () => this.basculerListe(MACHINES.gm);
+    this.allerGm = () => this.voyager('gm', 'aller');
+    this.poserPresentationRm = (el) => { this.elPres.rm = el; };
+    this.poserZoneRm = (el) => { this.elZone.rm = el; };
+    this.basculerRm = () => this.basculerListe(MACHINES.rm);
+    this.allerRm = () => this.voyager('rm', 'aller');
+    this.ouvrirF0 = () => this.setState({ feuille: 0 });
+    this.ouvrirF1 = () => this.setState({ feuille: 1 });
+    this.ouvrirF2 = () => this.setState({ feuille: 2 });
+    this.ouvrirF3 = () => this.setState({ feuille: 3 });
+    this.ouvrirF4 = () => this.setState({ feuille: 4 });
+    this.poserCarnet = (el) => { this.elPres.carnet = el; };
+    this.poserZoneCarnet = (el) => { this.elZone.carnet = el; };
+    this.allerCarnet = () => this.voyager('carnet', 'aller');
+    this.allerPourboire = () => { this.setState({ feuille: 4 }); this.voyager('carnet', 'aller'); };
+    // depuis une machine : la caméra revient au fauteuil, puis se penche sur le carnet, ouvert à « Installer »
+    this.carnetInstaller = () => {
+      if (this.state.vue === 'regie') { this.setState({ feuille: 1 }); this.voyager('carnet', 'aller'); return; }
+      this.voyager(this.machine, 'retour', () => { this.setState({ feuille: 1 }); this.voyager('carnet', 'aller'); });
+    };
+    this.basculer = () => this.basculerListe([0, 1, 2, 3]);
+    this.retourRegie = () => this.voyager(this.machine, 'retour');
+    this.animer = () => {
+      const i = this.state.piste;
+      if (i < 0 || !this.audio) { this.boucle = null; return; }
+      const niveaux = PISTES[i].niveaux;
+      const pos = Math.max(0, Math.min(niveaux.length - 1, Math.floor(this.audio.currentTime * 20)));
+      const niv = this.reduit() ? 4 : (Number(niveaux.charAt(pos)) || 0);
+      if (niv !== this.image) {
+        this.image = niv;
+        if (this.state.vue === 'regie') {
+          if (this.elNiveau) this.elNiveau.style.backgroundPosition = (-niv * LARGEUR_NIVEAU) + 'px 0';
+        } else {
+          const el = this.elPres[this.state.vue];
+          if (el) el.style.setProperty('--niv', (niv / 7).toFixed(2));
+        }
+      }
+      this.boucle = requestAnimationFrame(this.animer);
+    };
+  }
+  componentWillUnmount() {
+    this.arreter();
+    if (this.voyage) cancelAnimationFrame(this.voyage);
+  }
+  reduit() {
+    return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+  basculerListe(liste) {
+    if (this.state.piste >= 0) { this.arreter(); return; }
+    this.liste = liste;
+    this.rang = 0;
+    this.jouer(liste[0]);
+  }
+  jouer(i) {
+    if (!this.audio) {
+      this.audio = new Audio();
+      this.audio.preload = 'auto';
+      this.audio.addEventListener('ended', () => {
+        this.rang += 1;
+        if (this.rang < this.liste.length) this.jouer(this.liste[this.rang]); else this.arreter();
+      });
+    }
+    this.audio.src = PISTES[i].src;
+    const essai = this.audio.play();
+    if (essai && essai.catch) essai.catch(() => this.arreter());
+    this.image = -1;
+    this.setState({ piste: i });
+    if (!this.boucle) this.boucle = requestAnimationFrame(this.animer);
+  }
+  arreter() {
+    if (this.audio) this.audio.pause();
+    if (this.boucle) cancelAnimationFrame(this.boucle);
+    this.boucle = null;
+    this.image = -1;
+    if (this.state.piste !== -1) this.setState({ piste: -1 });
+  }
+  montrerImage(k) {
+    if (!this.elTrajet) return;
+    const x = -(k % TRAJET.colonnes) * TRAJET.largeur;
+    const y = -Math.floor(k / TRAJET.colonnes) * TRAJET.hauteur;
+    this.elTrajet.style.backgroundPosition = x + 'px ' + y + 'px';
+  }
+  arriver(sens) {
+    this.voyage = null;
+    const m = this.machine;
+    const ensuite = this.ensuite;
+    this.ensuite = null;
+    this.setState({ vue: sens === 'aller' ? m : 'regie' }, () => {
+      const cible = sens === 'aller' ? this.elPres[m] : this.elZone[m];
+      if (cible && cible.focus) cible.focus();
+      if (ensuite) ensuite();
+    });
+  }
+  voyager(machine, sens, ensuite) {
+    if (this.voyage) return;
+    this.arreter();
+    this.machine = machine;
+    this.ensuite = ensuite || null;
+    const derniere = TRAJET.images - 1;
+    if (this.reduit()) {
+      this.montrerImage(derniere);
+      this.arriver(sens);
+      return;
+    }
+    this.montrerImage(sens === 'aller' ? 1 : derniere);
+    this.setState({ vue: sens });
+    const debut = performance.now();
+    const etape = (t) => {
+      const s = Math.min(1, (t - debut) / TRAJET.duree);
+      const k = 1 + Math.round(s * (derniere - 1));
+      this.montrerImage(sens === 'aller' ? k : TRAJET.images - k);
+      if (s < 1) this.voyage = requestAnimationFrame(etape);
+      else this.arriver(sens);
+    };
+    this.voyage = requestAnimationFrame(etape);
+  }
+  renderVals() {
+    const piste = this.state.piste;
+    const vue = this.state.vue;
+    const joue = piste >= 0;
+    const machine = joue ? PISTES[piste].machine : '';
+    const enRegie = vue === 'regie';
+    return {
+      basculerEcoute: this.basculer,
+      retourRegie: this.retourRegie,
+      ecoutePresse: joue && enRegie ? 'true' : 'false',
+      etiquetteEcoute: joue ? 'ARRÊTER' : 'ÉCOUTER',
+      classeLecture: joue && enRegie ? 'joue' : '',
+      classeTitre: joue ? 'joue' : '',
+      titreLecture: joue ? PISTES[piste].titre + ' · ' + (this.rang + 1) + '/' + this.liste.length : '',
+      classeRegie: enRegie ? '' : 'cache',
+      classeVue: 'vue-' + vue,
+      classeTrajet: enRegie ? '' : 'visible ' + this.machine,
+      poserNiveau: this.poserNiveau,
+      poserTrajet: this.poserTrajet,
+      classeCarnet: vue === 'carnet' ? 'visible' : '',
+      allerCarnet: this.allerCarnet,
+      allerPourboire: this.allerPourboire,
+      carnetInstaller: this.carnetInstaller,
+      poserCarnet: this.poserCarnet,
+      poserZoneCarnet: this.poserZoneCarnet,
+      ouvrirF0: this.ouvrirF0,
+      classeF0: this.state.feuille === 0 ? 'ouverte' : '',
+      classeOngletF0: this.state.feuille === 0 ? 'actif' : '',
+      courantF0: this.state.feuille === 0 ? 'page' : 'false',
+      ouvrirF1: this.ouvrirF1,
+      classeF1: this.state.feuille === 1 ? 'ouverte' : '',
+      classeOngletF1: this.state.feuille === 1 ? 'actif' : '',
+      courantF1: this.state.feuille === 1 ? 'page' : 'false',
+      ouvrirF2: this.ouvrirF2,
+      classeF2: this.state.feuille === 2 ? 'ouverte' : '',
+      classeOngletF2: this.state.feuille === 2 ? 'actif' : '',
+      courantF2: this.state.feuille === 2 ? 'page' : 'false',
+      ouvrirF3: this.ouvrirF3,
+      classeF3: this.state.feuille === 3 ? 'ouverte' : '',
+      classeOngletF3: this.state.feuille === 3 ? 'actif' : '',
+      courantF3: this.state.feuille === 3 ? 'page' : 'false',
+      ouvrirF4: this.ouvrirF4,
+      classeF4: this.state.feuille === 4 ? 'ouverte' : '',
+      classeOngletF4: this.state.feuille === 4 ? 'actif' : '',
+      courantF4: this.state.feuille === 4 ? 'page' : 'false',
+      basculerGm: this.basculerGm,
+      allerGm: this.allerGm,
+      presseGm: joue && vue === 'gm' ? 'true' : 'false',
+      etiquetteGm: joue ? 'ARRÊTER' : 'ÉCOUTER',
+      sonneGm: machine === 'gm' && enRegie ? 'sonne' : '',
+      classeFacadeGm: joue && vue === 'gm' ? 'sonne' : '',
+      classePresGm: vue === 'gm' ? 'visible' : '',
+      poserPresentationGm: this.poserPresentationGm,
+      poserZoneGm: this.poserZoneGm,
+      basculerRm: this.basculerRm,
+      allerRm: this.allerRm,
+      presseRm: joue && vue === 'rm' ? 'true' : 'false',
+      etiquetteRm: joue ? 'ARRÊTER' : 'ÉCOUTER',
+      sonneRm: machine === 'rm' && enRegie ? 'sonne' : '',
+      classeFacadeRm: joue && vue === 'rm' ? 'sonne' : '',
+      classePresRm: vue === 'rm' ? 'visible' : '',
+      poserPresentationRm: this.poserPresentationRm,
+      poserZoneRm: this.poserZoneRm,
+    };
+  }
+}
+const planche = monterPlanche(document.getElementById('ecran'), Component);
+const TITRES = { regie: 'Analogue Touch · la régie', gm: 'Grand-mère · Analogue Touch', rm: 'Reine Mère · Analogue Touch', carnet: 'Le carnet de travail · Analogue Touch' };
+// Échap ramène dans la régie (sur le site seulement : la planche de Claude Design n'en veut pas)
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && ['gm', 'rm', 'carnet'].includes(planche.state.vue)) planche.retourRegie();
+});
+
+const defile = document.getElementById('defile');
+const ecranEl = document.getElementById('ecran');
+const debout = () => window.innerWidth < window.innerHeight;
+const centrer = (doux) => defile.scrollTo({ left: (defile.scrollWidth - defile.clientWidth) / 2, behavior: doux ? 'smooth' : 'auto' });
+// la scène garde ses proportions : elle tient dans la fenêtre ; debout, on la fait glisser
+function ajuster() {
+  // debout : la régie prend environ les deux tiers de la hauteur, à un nombre entier de pixels d'écran par pixel de la scène
+  const k = debout() ? Math.max(1, Math.floor(window.innerHeight * 0.72 / 540)) * 540 / 810 : Math.min(window.innerWidth / 1440, window.innerHeight / 810);
+  document.documentElement.style.setProperty('--k', k);
+}
+// une machine ou le carnet, sur un téléphone debout : la page passe en colonne
+let vue = '';
+function suivreVue() {
+  const v = (ecranEl.className.match(/vue-(\w+)/) || [])[1] || 'regie';
+  if (v === vue) return;
+  const avant = vue;
+  vue = v;
+  if (TITRES[v]) document.title = TITRES[v];
+  const fiche = ['gm', 'rm', 'carnet'].includes(v);
+  defile.classList.toggle('fiche', fiche);
+  if (fiche) defile.scrollTo(0, 0);
+  else if (debout() && (v === 'aller' || (v === 'regie' && avant === 'retour'))) centrer(true);
+  else if (debout() && v === 'retour') requestAnimationFrame(() => centrer(false));
+}
+new MutationObserver(suivreVue).observe(ecranEl, { attributes: true, attributeFilter: ['class'] });
+// au doigt, sans survol : un premier appui montre le nom de l'objet, le second y va
+const auDoigt = window.matchMedia && window.matchMedia('(hover: none)').matches;
+ecranEl.addEventListener('click', (e) => {
+  if (!auDoigt) return;
+  const z = e.target.closest('nav[aria-label="La régie"] .zone');
+  if (!z || z.dataset.choisie) return;
+  e.stopPropagation();
+  e.preventDefault();
+  document.querySelectorAll('.zone[data-choisie]').forEach((x) => delete x.dataset.choisie);
+  z.dataset.choisie = '1';
+}, true);
+window.addEventListener('resize', () => { ajuster(); if (debout() && !defile.classList.contains('fiche')) centrer(false); });
+ajuster();
+suivreVue();
+if (debout()) centrer(false);
+// le mot « glisse » s'efface dès que le doigt (ou la molette) touche la régie, pas au centrage du départ
+for (const t of ['touchstart', 'pointerdown', 'wheel']) defile.addEventListener(t, () => document.getElementById('glisse').classList.add('vu'), { once: true, passive: true });
+</script>
+</body>
+</html>
