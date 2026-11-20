@@ -7,14 +7,34 @@
 <link rel="icon" href="/assets/icone-32.png" sizes="32x32" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Silkscreen&amp;display=swap" rel="stylesheet">
 <style>
-body{margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;background:#120E0C;font-family:'Silkscreen',monospace}
-.scotch{display:inline-block;padding:10px 18px 9px;font-size:16px;line-height:1;color:#1F1D1A;text-decoration:none;transform:rotate(-1.5deg);background:linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.97);clip-path:polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%);background-color:#E1D5B1}
+body{margin:0;min-height:100vh;display:flex;background:#120E0C;font-family:'Silkscreen',monospace}
+main{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;padding:100px 16px 48px}
+.fl{display:inline-block;width:.625em;height:.625em;vertical-align:0;background-color:currentColor;-webkit-mask:var(--fl) 0 0/100% 100% no-repeat;mask:var(--fl) 0 0/100% 100% no-repeat}
+.fl-d{--fl:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 5' shape-rendering='crispEdges'%3E%3Cpath d='M2 0h1v1h-1zM3 1h1v1h-1zM0 2h5v1h-5zM3 3h1v1h-1zM2 4h1v1h-1z'/%3E%3C/svg%3E")}
+.fl-g{--fl:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 5' shape-rendering='crispEdges'%3E%3Cpath d='M2 0h1v1h-1zM1 1h1v1h-1zM0 2h5v1h-5zM1 3h1v1h-1zM2 4h1v1h-1z'/%3E%3C/svg%3E")}
+.fl-hd{--fl:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 5' shape-rendering='crispEdges'%3E%3Cpath d='M2 0h3v1h-3zM3 1h2v1h-2zM2 2h1v1h-1zM4 2h1v1h-1zM1 3h1v1h-1zM0 4h1v1h-1z'/%3E%3C/svg%3E")}
+.logo{position:absolute;left:24px;top:20px;display:block;padding:8px 14px;color:#1F1D1A;transform:rotate(-1deg);transition:transform .15s;background:linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.97);background-color:rgba(231,219,182,0.97);clip-path:polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%)}
+.logo svg{display:block;width:236px;height:36px}
+.logo:hover{transform:rotate(0deg) translateY(-2px)}
+.logo:focus-visible{outline:none;background-color:#1F1D1A;color:#F3E6C8}
+.scotch{display:inline-block;margin:0;padding:10px 18px 9px;font-size:16px;font-weight:400;line-height:1;color:#1F1D1A;text-decoration:none;transform:rotate(-1.5deg);transition:transform .15s;background:linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.97);background-color:rgba(231,219,182,0.97);clip-path:polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%)}
 a.scotch{transform:rotate(1.2deg)}
-a.scotch:focus-visible{outline:none;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+a.scotch:hover{transform:rotate(0deg) translateY(-2px)}
+a.scotch:focus-visible{outline:none;background-color:#1F1D1A;color:#F3E6C8}
+@media (prefers-reduced-motion: reduce){.scotch,.logo{transition:none}}
 </style>
 </head>
 <body>
-<p class="scotch">CETTE PAGE N'EXISTE PAS</p>
-<a class="scotch" href="/">← LA RÉGIE</a>
+<main>
+  <a class="logo" href="/" aria-label="Analogue Touch, accueil">
+    <svg aria-hidden="true" viewBox="-24 -18 236 36" shape-rendering="crispEdges">
+      <path fill="currentColor" d="M-1 -16h2v1h-2zM-2 -15h3v1h-3zM-3 -14h4v1h-4zM-4 -13h2v1h-2zM-1 -13h2v1h-2zM-5 -12h2v1h-2zM-1 -12h2v1h-2zM-6 -11h2v1h-2zM-1 -11h2v1h-2zM-7 -10h2v1h-2zM-1 -10h2v1h-2zM-8 -9h24v1h-24zM-9 -8h25v1h-25zM-10 -7h2v1h-2zM-1 -7h2v1h-2zM7 -7h2v1h-2zM-11 -6h2v1h-2zM-1 -6h2v1h-2zM7 -6h2v1h-2zM-12 -5h2v1h-2zM-1 -5h2v1h-2zM7 -5h2v1h-2zM-13 -4h2v1h-2zM-1 -4h2v1h-2zM7 -4h2v1h-2zM-14 -3h2v1h-2zM-1 -3h2v1h-2zM7 -3h2v1h-2zM-15 -2h2v1h-2zM-1 -2h2v1h-2zM7 -2h2v1h-2zM-48 -1h34v1h-34zM-1 -1h2v1h-2zM7 -1h2v1h-2zM15 -1h33v1h-33zM-48 0h33v1h-33zM-1 0h2v1h-2zM7 0h2v1h-2zM15 0h33v1h-33zM-1 1h2v1h-2zM7 1h2v1h-2zM14 1h2v1h-2zM-1 2h2v1h-2zM7 2h2v1h-2zM13 2h2v1h-2zM-1 3h2v1h-2zM7 3h2v1h-2zM12 3h2v1h-2zM-1 4h2v1h-2zM7 4h2v1h-2zM11 4h2v1h-2zM-1 5h2v1h-2zM7 5h2v1h-2zM10 5h2v1h-2zM-1 6h2v1h-2zM7 6h4v1h-4zM-1 7h2v1h-2zM7 7h3v1h-3zM-1 8h2v1h-2zM7 8h2v1h-2zM-1 9h2v1h-2zM6 9h2v1h-2zM-1 10h2v1h-2zM5 10h2v1h-2zM-1 11h2v1h-2zM4 11h2v1h-2zM-1 12h2v1h-2zM3 12h2v1h-2zM-1 13h2v1h-2zM2 13h2v1h-2zM-1 14h4v1h-4zM-1 15h3v1h-3z"></path>
+      <rect x="48" y="-1" width="160" height="2" fill="currentColor"></rect>
+      <text x="26" y="-3" font-family="Silkscreen, monospace" font-size="16" fill="currentColor">ANALOGUE TOUCH</text>
+    </svg>
+  </a>
+<h1 class="scotch">CETTE PAGE N'EXISTE PAS</h1>
+<a class="scotch" href="/"><span class="fl fl-g" aria-hidden="true"></span> LA RÉGIE</a>
+</main>
 </body>
 </html>

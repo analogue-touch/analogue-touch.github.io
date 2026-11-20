@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Analogue Touch · la régie</title>
+<title>La régie · Analogue Touch</title>
 <meta name="theme-color" content="#120E0C">
 <link rel="icon" href="assets/icone-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="assets/icone-16.png" sizes="16x16" type="image/png">
@@ -17,15 +17,29 @@
 <meta name="description" content="Des plugins gratuits refaits d'après des machines analogiques, avec l'IA. Bêta.">
 <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&amp;family=Silkscreen&amp;display=swap" rel="stylesheet">
 <style>
-body{margin:0;background:#120E0C}
+:root{--t:clamp(16px, calc(16px / var(--k, 1)), 24px)}
+body{margin:0;background:#120E0C;color:#F3E6C8}
+.lecteur{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+.fl{display:inline-block;width:.625em;height:.625em;vertical-align:0;background-color:currentColor;-webkit-mask:var(--fl) 0 0/100% 100% no-repeat;mask:var(--fl) 0 0/100% 100% no-repeat}
+.fl-d{--fl:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 5' shape-rendering='crispEdges'%3E%3Cpath d='M2 0h1v1h-1zM3 1h1v1h-1zM0 2h5v1h-5zM3 3h1v1h-1zM2 4h1v1h-1z'/%3E%3C/svg%3E")}
+.fl-g{--fl:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 5' shape-rendering='crispEdges'%3E%3Cpath d='M2 0h1v1h-1zM1 1h1v1h-1zM0 2h5v1h-5zM1 3h1v1h-1zM2 4h1v1h-1z'/%3E%3C/svg%3E")}
+.fl-hd{--fl:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 5 5' shape-rendering='crispEdges'%3E%3Cpath d='M2 0h3v1h-3zM3 1h2v1h-2zM2 2h1v1h-1zM4 2h1v1h-1zM1 3h1v1h-1zM0 4h1v1h-1z'/%3E%3C/svg%3E")}
+.logo{position:absolute;left:24px;top:20px;display:block;padding:8px 14px;color:#1F1D1A;transform:rotate(-1deg);transition:transform .15s;background:linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.97);background-color:rgba(231,219,182,0.97);clip-path:polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%)}
+.logo svg{display:block;width:236px;height:36px}
+.logo:hover{transform:rotate(0deg) translateY(-2px)}
+.logo:focus-visible{outline:none;background-color:#1F1D1A;color:#F3E6C8}
 .zone{position:absolute;display:block;pointer-events:none;outline:3px dashed rgba(243,230,200,0);outline-offset:4px}
 .zone:focus-visible{outline-color:rgba(243,230,200,0.9)}
 .forme{position:absolute;inset:0;pointer-events:auto;cursor:pointer;background-color:rgba(0,0,0,0);mix-blend-mode:screen;transition:background-color .15s}
 .zone:hover .forme,.zone:focus-visible .forme{background-color:#5A4020}
-.zone[aria-disabled="true"] .forme{cursor:default}
-.etiquette{position:absolute;left:50%;bottom:calc(100% + 12px);transform:translateX(-50%) rotate(-1.5deg);opacity:0;pointer-events:none;white-space:nowrap;padding:7px 14px 6px;font-family:'Silkscreen',monospace;font-size:16px;color:#1F1D1A;background:linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.97);clip-path:polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%);transition:opacity .15s}
+.zone.bientot .forme{cursor:default}
+.etiquette{position:absolute;left:50%;bottom:calc(100% + 12px);transform:translateX(-50%) rotate(-1.5deg);opacity:0;pointer-events:none;white-space:nowrap;padding:.44em .875em .375em;font-family:'Silkscreen',monospace;font-size:var(--t);line-height:1;color:#1F1D1A;background:linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.97);background-color:rgba(231,219,182,0.97);clip-path:polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%);transition:opacity .15s}
 .zone:hover .etiquette,.zone:focus-visible .etiquette{opacity:1}
 .zone.dessous .etiquette{bottom:auto;top:calc(100% + 12px)}
+.zone.gauche .etiquette{left:auto;right:calc(100% + 12px);bottom:auto;top:50%;transform:translateY(-50%) rotate(-1.5deg)}
+.zone.droite .etiquette{left:calc(100% + 12px);bottom:auto;top:50%;transform:translateY(-50%) rotate(1.5deg)}
+.zone.secoue .etiquette{animation:secouer .32s steps(4)}
+@keyframes secouer{0%,100%{translate:0 0}25%{translate:-5px 0}75%{translate:5px 0}}
 button.zone{border:0;padding:0;margin:0;background:none;font:inherit;color:inherit}
 .zone.sonne .forme{background-color:#5A4020}
 .zone.doux:hover .forme,.zone.doux:focus-visible .forme,.zone.doux.sonne .forme,.zone.doux[data-choisie] .forme{background-color:#2E2010}
@@ -40,31 +54,33 @@ button.zone{border:0;padding:0;margin:0;background:none;font:inherit;color:inher
 .trajet.gm{background-image:url(assets/trajet-gm.webp)}
 .trajet.rm{background-image:url(assets/trajet-rm.webp)}
 .trajet.carnet{background-image:url(assets/trajet-carnet.webp)}
-.enlecture{position:absolute;left:50%;top:22px;margin:0;transform:translateX(-50%) rotate(1deg);padding:7px 14px 6px;white-space:nowrap;font-family:'Silkscreen',monospace;font-size:16px;color:#1F1D1A;opacity:0;transition:opacity .2s;background:linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.97);clip-path:polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%)}
+.enlecture{position:absolute;left:50%;top:22px;margin:0;transform:translateX(-50%) rotate(1deg);padding:.44em .875em .375em;white-space:nowrap;font-family:'Silkscreen',monospace;font-size:var(--t);line-height:1;color:#1F1D1A;opacity:0;transition:opacity .2s;background:linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.97);background-color:rgba(231,219,182,0.97);clip-path:polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%)}
 .enlecture.joue{opacity:1}
 .presentation{position:absolute;inset:0;visibility:hidden;opacity:0;transition:opacity .2s,visibility 0s linear .2s}
 .presentation.visible{visibility:visible;opacity:1;transition:opacity .25s,visibility 0s}
 .presentation:focus{outline:none}
 .boitier{position:absolute;background:#141312;box-shadow:inset 0 0 0 3px #2A2826}
-.facade{position:absolute;display:block;padding:0;margin:0;border:0;background:none;cursor:pointer}
+.facade{position:absolute;display:block;cursor:pointer}
 .facade img{display:block;width:100%;height:100%}
 .facade::after{content:'';position:absolute;inset:0;background-color:rgba(0,0,0,0);mix-blend-mode:screen;pointer-events:none;transition:background-color .15s}
-.facade:hover::after,.facade:focus-visible::after{background-color:#3A2A14}
+.facade:hover::after{background-color:#3A2A14}
 .facade.sonne::after{background-color:#6A4A1E;opacity:calc(0.2 + var(--niv, 0.5) * 0.8)}
-.facade:focus-visible{outline:3px dashed rgba(243,230,200,0.9);outline-offset:6px}
 .actions{position:absolute;left:0;right:0;bottom:24px;display:flex;justify-content:center;align-items:center;gap:28px}
-.scotch{--r:-1.5deg;display:inline-block;margin:0;padding:10px 18px 9px;font-family:'Silkscreen',monospace;font-size:16px;line-height:1;color:#1F1D1A;text-decoration:none;border:0;cursor:pointer;transform:rotate(var(--r));transition:transform .15s;background:linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.97);clip-path:polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%)}
+.scotch{--r:-1.5deg;display:inline-block;margin:0;padding:.625em 1.125em .5625em;font-family:'Silkscreen',monospace;font-size:var(--t);line-height:1;color:#1F1D1A;text-decoration:none;border:0;cursor:pointer;transform:rotate(var(--r));transition:transform .15s;background:linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.97);background-color:rgba(231,219,182,0.97);clip-path:polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%)}
 .scotch:nth-child(2n){--r:1.2deg}
 .scotch:hover{transform:rotate(0deg) translateY(-2px)}
-.scotch:focus-visible{outline:none;background-color:#F3E6C8;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+.scotch:focus-visible{outline:none;background-color:#1F1D1A;color:#F3E6C8}
+.scotch.indispo{cursor:default;opacity:.8}
+.scotch.indispo:hover{transform:rotate(var(--r))}
+.retour{position:absolute;left:28px;bottom:24px;z-index:2}
 .numero{--r:4deg;position:absolute;cursor:default}
 .presentation.visible .facade img{animation:allumage .5s steps(5) backwards}
-.presentation.visible .actions .scotch{animation:poser .34s cubic-bezier(.16,1,.3,1) backwards}
+.presentation.visible .scotch{animation:poser .34s cubic-bezier(.16,1,.3,1) backwards}
+.presentation.visible .retour{animation-delay:.2s}
 .presentation.visible .actions .scotch:nth-child(1){animation-delay:.28s}
 .presentation.visible .actions .scotch:nth-child(2){animation-delay:.36s}
 .presentation.visible .actions .scotch:nth-child(3){animation-delay:.44s}
-.presentation.visible .actions .scotch:nth-child(4){animation-delay:.52s}
-.presentation.visible .numero{animation:poser .34s cubic-bezier(.16,1,.3,1) .62s backwards}
+.presentation.visible .numero{animation-delay:.62s}
 @keyframes allumage{from{filter:brightness(.12) saturate(.2)}to{filter:brightness(1) saturate(1)}}
 @keyframes poser{from{opacity:0;transform:translateY(-18px) rotate(calc(var(--r) * 5)) scale(1.12)}to{opacity:1;transform:rotate(var(--r))}}
 .carnet{position:absolute;inset:0;visibility:hidden;opacity:0;transition:opacity .2s,visibility 0s linear .2s}
@@ -77,11 +93,12 @@ button.zone{border:0;padding:0;margin:0;background:none;font:inherit;color:inher
 .page{position:relative;box-sizing:border-box;padding:58px 46px 48px 58px;color:#2E2622;font-family:'Kalam',cursive;font-size:21px;line-height:36px;background-image:repeating-linear-gradient(180deg,rgba(0,0,0,0) 0,rgba(0,0,0,0) 34px,rgba(120,96,60,0.2) 34px,rgba(120,96,60,0.2) 36px);background-position:0 22px}
 .page.gauche{background-color:#F3E6C8}
 .page.droite{padding-left:52px;background-color:#EDE0C0}
-.page h2{margin:0 0 18px;font-family:'Silkscreen',monospace;font-weight:400;font-size:24px;line-height:36px;color:#1F1D1A}
-.page h3{margin:18px 0 0;font-family:'Silkscreen',monospace;font-weight:400;font-size:16px;line-height:36px;color:#1F1D1A}
-.page p,.page ol,.page ul{margin:0 0 12px}
+.page h2{margin:0;font-family:'Silkscreen',monospace;font-weight:400;font-size:24px;line-height:36px;color:#1F1D1A}
+.page h2:focus{outline:none}
+.page h3{margin:0;font-family:'Silkscreen',monospace;font-weight:400;font-size:16px;line-height:36px;color:#1F1D1A}
+.page p,.page ol,.page ul{margin:0 0 36px;text-wrap:pretty}
 .page ol,.page ul{padding-left:28px}
-.page li{margin:0 0 6px;padding-left:4px}
+.page li{margin:0;padding-left:4px;text-wrap:pretty}
 .page ol li::marker{font-weight:700}
 .page ul.journal{list-style:none;padding-left:0}
 .page ul.journal li{padding-left:0}
@@ -89,8 +106,10 @@ button.zone{border:0;padding:0;margin:0;background:none;font:inherit;color:inher
 .page a,.page .lien{color:#9A3A16;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px;background:none;border:0;padding:0;font:inherit;cursor:pointer;text-align:left}
 .page a:focus-visible,.page .lien:focus-visible{outline:2px dashed #9A3A16;outline-offset:3px}
 .page .note{color:#5E5850}
-.page .signature{margin-top:22px;font-weight:700}
-.page .chemin{display:inline-block;white-space:nowrap;margin:6px 0 4px;padding:5px 12px 4px;font-family:Consolas,'Cascadia Mono','Courier New',monospace;font-size:16px;line-height:24px;color:#1F1D1A;transform:rotate(-0.8deg);background:linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.97);clip-path:polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%)}
+.page .signature{font-weight:700}
+.page .indispo{color:#5E5850}
+.page .mot{white-space:nowrap}
+.page .chemin{display:inline-block;vertical-align:middle;white-space:nowrap;margin:0;padding:5px 12px 4px;font-family:Consolas,'Cascadia Mono','Courier New',monospace;font-size:16px;line-height:24px;color:#1F1D1A;transform:rotate(-0.8deg);background:linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.97);background-color:rgba(231,219,182,0.97);clip-path:polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%)}
 .page .folio{position:absolute;bottom:14px;font-family:'Silkscreen',monospace;font-size:16px;line-height:24px;color:#665A50}
 .page.gauche .folio{left:24px}
 .page.droite .folio{right:24px}
@@ -107,25 +126,20 @@ button.zone{border:0;padding:0;margin:0;background:none;font:inherit;color:inher
 .carnet.visible .double.ouverte .page > .folio{animation:none}
 @keyframes encre{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 .onglets{position:absolute;display:flex;flex-direction:column;align-items:flex-start;gap:10px}
-.onglet{--r:-1deg;margin:0;padding:10px 18px 9px 26px;font-family:'Silkscreen',monospace;font-size:16px;line-height:1;color:#1F1D1A;border:0;cursor:pointer;transform:rotate(var(--r));transition:transform .15s;background:linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.97);clip-path:polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%)}
+.onglet{--r:-1deg;position:relative;margin:0;padding:.625em 1.125em .5625em 1.625em;font-family:'Silkscreen',monospace;font-size:var(--t);line-height:1;color:#1F1D1A;border:0;cursor:pointer;transform:rotate(var(--r));transition:transform .15s;background:linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.97);background-color:rgba(231,219,182,0.97);clip-path:polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%)}
 .onglet:nth-child(2n){--r:1deg}
 .onglet:hover{transform:translateX(6px) rotate(var(--r))}
 .onglet.actif{transform:translateX(14px) rotate(var(--r));background-color:#F3E6C8}
-.onglet:focus-visible{outline:none;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
-.carnet .retour{position:absolute;right:28px;bottom:24px}
-@media (prefers-reduced-motion: reduce){.forme,.etiquette,.enlecture,.presentation,.carnet,.scotch,.onglet,.facade::after{transition:none}.bobines.joue,.presentation.visible .facade img,.presentation.visible .scotch,.carnet.visible .double.ouverte .page > *{animation:none}}
+.onglet.actif::before{content:'';position:absolute;left:.625em;top:50%;width:.5em;height:.5em;margin-top:-.25em;background-color:currentColor}
+.onglet:focus-visible{outline:none;background-color:#1F1D1A;color:#F3E6C8}
+@media (prefers-reduced-motion: reduce){.forme,.etiquette,.enlecture,.presentation,.carnet,.scotch,.onglet,.logo,.facade::after{transition:none}.bobines.joue,.presentation.visible .facade img,.presentation.visible .scotch,.carnet.visible .double.ouverte .page > *,.zone.secoue .etiquette{animation:none}}
 </style>
-<link rel="preload" as="image" href="assets/trajet-gm.webp">
-<link rel="preload" as="image" href="assets/trajet-rm.webp">
-<link rel="preload" as="image" href="assets/trajet-carnet.webp">
 <style>
 html,body{height:100%;overflow:hidden}
 .defile{position:fixed;inset:0;overflow:hidden}
 .plateau{position:absolute;inset:0}
 .ecran{position:absolute;left:50%;top:50%;width:1440px;height:810px;transform:translate(-50%,-50%) scale(var(--k,1))}
-/* le logo du téléphone porte un display en ligne (copié du logo de la scène) : il faut !important pour le cacher */
-.logo-mobile{display:none !important}
-.glisse{display:none}
+.logo.logo-mobile,.glisse{display:none}
 /* ── Le téléphone tenu debout ──
    La régie : on la voit sur toute la hauteur et on la fait glisser pour regarder autour.
    Une machine ou le carnet : la page passe en colonne, la façade sur toute la largeur. */
@@ -134,107 +148,119 @@ html,body{height:100%;overflow:hidden}
   .defile::-webkit-scrollbar{display:none}
   .plateau{right:auto;bottom:auto;top:calc(50% - 405px * var(--k,1));height:calc(810px * var(--k,1));width:calc(1440px * var(--k,1))}
   .ecran{left:0;top:0;transform:scale(var(--k,1));transform-origin:0 0}
-  .ecran > div > a[aria-label="Analogue Touch, accueil"]{display:none !important}
-  .logo-mobile{display:block !important;position:fixed !important;left:10px !important;top:10px !important;z-index:5}
-  .glisse{display:block;position:fixed;left:50%;bottom:22px;z-index:5;margin:0;transform:translateX(-50%) rotate(-1deg);transition:opacity .4s}
+  .ecran .logo{display:none}
+  .logo.logo-mobile{display:block;position:fixed;left:10px;top:10px;z-index:5}
+  .glisse{--t:16px;display:block;position:fixed;left:50%;bottom:22px;z-index:5;margin:0;white-space:nowrap;transform:translateX(-50%) rotate(-1deg);transition:opacity .4s}
   .glisse.vu,.defile.fiche ~ .glisse{opacity:0;pointer-events:none}
   .zone[data-choisie] .etiquette{opacity:1}
   .zone[data-choisie] .forme{background-color:#5A4020}
-  .defile.fiche{overflow-x:hidden;overflow-y:auto}
+  .defile.fiche{--t:16px;overflow-x:hidden;overflow-y:auto}
+  /* une bande de nuit sous le logo : le texte qui défile passe dessous, pas à travers le scotch */
+  .defile.fiche::before{content:'';position:fixed;left:0;right:0;top:0;height:78px;background:#120E0C;z-index:4;pointer-events:none}
   .defile.fiche .plateau{position:relative;top:auto;width:100%;height:auto}
   .defile.fiche .ecran{position:relative;transform:none;width:100%;height:auto;min-height:100vh}
   .defile.fiche .ecran > div{width:auto !important;height:auto !important;min-height:100vh;overflow:visible !important}
   .defile.fiche .ecran > div > img,.defile.fiche .niveau,.defile.fiche .bobines,.defile.fiche .trajet,.defile.fiche nav[aria-label="La régie"]{display:none !important}
   .defile.fiche .presentation,.defile.fiche .carnet{display:none}
-  .defile.fiche .presentation.visible,.defile.fiche .carnet.visible{position:relative;inset:auto;display:flex;flex-direction:column;align-items:stretch;gap:22px;padding:86px 16px 48px;box-sizing:border-box}
+  .defile.fiche .presentation.visible,.defile.fiche .carnet.visible{position:relative;inset:auto;display:flex;flex-direction:column;align-items:stretch;gap:22px;padding:94px 16px 48px;box-sizing:border-box}
   .defile.fiche .boitier{display:none}
   .defile.fiche .facade{position:relative;left:auto !important;top:auto !important;width:100% !important;height:auto !important;box-shadow:0 0 0 6px #141312,0 0 0 9px #2A2826;margin:9px 0}
   .defile.fiche .facade img{height:auto}
   .defile.fiche .numero{position:relative;left:auto !important;top:auto !important;align-self:flex-start}
   .defile.fiche .actions{position:static;flex-direction:column;align-items:stretch;gap:14px}
-  .defile.fiche .actions .scotch{text-align:center;padding:15px 18px 14px}
-  .defile.fiche .actions .scotch:first-child{order:4}
+  .defile.fiche .actions .scotch,.defile.fiche .retour{text-align:center;padding:15px 18px 14px}
+  /* « La régie » au même endroit partout : tout en bas de la colonne, sur toute la largeur */
+  .defile.fiche .retour{position:static;order:99;align-self:stretch;margin-top:8px}
   .defile.fiche .feuilles{position:relative;left:auto !important;top:auto !important;width:auto !important;height:auto !important;background:none}
   .defile.fiche .feuilles::after{display:none}
   .defile.fiche .double.ouverte{position:static;display:flex;flex-direction:column;gap:14px}
-  .defile.fiche .page{padding:42px 22px 48px 26px;background-color:#F3E6C8}
+  .defile.fiche .page{padding:58px 22px 48px 26px;background-color:#F3E6C8}
   .defile.fiche .page.droite{padding-left:26px;background-color:#EDE0C0}
   .defile.fiche .page h2{font-size:16px;line-height:36px}
   .defile.fiche .page .chemin{white-space:normal;overflow-wrap:anywhere;font-size:14px}
   .defile.fiche .onglets{position:static;left:auto !important;top:auto !important;flex-direction:row;flex-wrap:wrap;gap:10px;order:-1}
-  .defile.fiche .onglet{padding:12px 14px 11px}
+  .defile.fiche .onglet{padding:12px 14px 11px 26px}
   .defile.fiche .onglet.actif,.defile.fiche .onglet:hover{transform:rotate(var(--r)) translateY(3px)}
-  .defile.fiche .carnet .retour{position:static;align-self:flex-start;padding:15px 18px 14px}
   .defile.fiche .enlecture{position:fixed;top:64px;z-index:5}
 }
 </style>
 </head>
 <body>
 <noscript><p class="scotch" style="position:fixed;left:16px;right:16px;top:40%;z-index:9;text-align:center">LA RÉGIE A BESOIN DE JAVASCRIPT. LE CODE EST SUR GITHUB.COM/ANALOGUE-TOUCH</p></noscript>
+  <a class="logo logo-mobile" href="./" aria-label="Analogue Touch, accueil">
+    <svg aria-hidden="true" viewBox="-24 -18 236 36" shape-rendering="crispEdges">
+      <path fill="currentColor" d="M-1 -16h2v1h-2zM-2 -15h3v1h-3zM-3 -14h4v1h-4zM-4 -13h2v1h-2zM-1 -13h2v1h-2zM-5 -12h2v1h-2zM-1 -12h2v1h-2zM-6 -11h2v1h-2zM-1 -11h2v1h-2zM-7 -10h2v1h-2zM-1 -10h2v1h-2zM-8 -9h24v1h-24zM-9 -8h25v1h-25zM-10 -7h2v1h-2zM-1 -7h2v1h-2zM7 -7h2v1h-2zM-11 -6h2v1h-2zM-1 -6h2v1h-2zM7 -6h2v1h-2zM-12 -5h2v1h-2zM-1 -5h2v1h-2zM7 -5h2v1h-2zM-13 -4h2v1h-2zM-1 -4h2v1h-2zM7 -4h2v1h-2zM-14 -3h2v1h-2zM-1 -3h2v1h-2zM7 -3h2v1h-2zM-15 -2h2v1h-2zM-1 -2h2v1h-2zM7 -2h2v1h-2zM-48 -1h34v1h-34zM-1 -1h2v1h-2zM7 -1h2v1h-2zM15 -1h33v1h-33zM-48 0h33v1h-33zM-1 0h2v1h-2zM7 0h2v1h-2zM15 0h33v1h-33zM-1 1h2v1h-2zM7 1h2v1h-2zM14 1h2v1h-2zM-1 2h2v1h-2zM7 2h2v1h-2zM13 2h2v1h-2zM-1 3h2v1h-2zM7 3h2v1h-2zM12 3h2v1h-2zM-1 4h2v1h-2zM7 4h2v1h-2zM11 4h2v1h-2zM-1 5h2v1h-2zM7 5h2v1h-2zM10 5h2v1h-2zM-1 6h2v1h-2zM7 6h4v1h-4zM-1 7h2v1h-2zM7 7h3v1h-3zM-1 8h2v1h-2zM7 8h2v1h-2zM-1 9h2v1h-2zM6 9h2v1h-2zM-1 10h2v1h-2zM5 10h2v1h-2zM-1 11h2v1h-2zM4 11h2v1h-2zM-1 12h2v1h-2zM3 12h2v1h-2zM-1 13h2v1h-2zM2 13h2v1h-2zM-1 14h4v1h-4zM-1 15h3v1h-3z"></path>
+      <rect x="48" y="-1" width="160" height="2" fill="currentColor"></rect>
+      <text x="26" y="-3" font-family="Silkscreen, monospace" font-size="16" fill="currentColor">ANALOGUE TOUCH</text>
+    </svg>
+  </a>
 <div class="defile" id="defile">
 <div class="plateau">
 <main class="ecran {{ classeVue }}" id="ecran">
 <div style="position: relative; width: 1440px; height: 810px; overflow: hidden; background: #120E0C">
+  <h1 class="lecteur">Analogue Touch : la régie</h1>
   <img src="assets/regie.webp" alt="La régie d'Analogue Touch, disposée en U : au fond un mur de briques et deux grandes enceintes, devant lui la console à seize voies dans un meuble plein avec deux baies de rack ; à gauche deux synthés sur un pied tourné vers la console ; à droite un rack studio avec Six-Trente en haut, un magnétophone à bobines posé dessus et un casque accroché ; au premier plan le fauteuil et une desserte avec un carnet et un pot à pourboires." width="1440" height="810" style="display: block; width: 1440px; height: 810px; image-rendering: pixelated">
   <div class="niveau {{ classeLecture }}" ref="{{ poserNiveau }}" aria-hidden="true"></div>
   <div class="bobines {{ classeLecture }}" aria-hidden="true"></div>
   <div class="trajet {{ classeTrajet }}" ref="{{ poserTrajet }}" aria-hidden="true"></div>
-  <p class="enlecture {{ classeTitre }}" role="status">{{ titreLecture }}</p>
+  <p class="enlecture {{ classeTitre }}" role="status"><span aria-hidden="true">{{ titreLecture }}</span><span class="lecteur">{{ titreLu }}</span></p>
 
-  <a href="./" aria-label="Analogue Touch, accueil" style="position: absolute; left: 24px; top: 20px; display: block; padding: 8px 14px; transform: rotate(-1deg); background: linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.94); clip-path: polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%)">
-    <svg aria-hidden="true" viewBox="-24 -18 236 36" shape-rendering="crispEdges" style="display: block; width: 236px; height: 36px">
-      <path fill="#1F1D1A" d="M-1 -16h2v1h-2zM-2 -15h3v1h-3zM-3 -14h4v1h-4zM-4 -13h2v1h-2zM-1 -13h2v1h-2zM-5 -12h2v1h-2zM-1 -12h2v1h-2zM-6 -11h2v1h-2zM-1 -11h2v1h-2zM-7 -10h2v1h-2zM-1 -10h2v1h-2zM-8 -9h24v1h-24zM-9 -8h25v1h-25zM-10 -7h2v1h-2zM-1 -7h2v1h-2zM7 -7h2v1h-2zM-11 -6h2v1h-2zM-1 -6h2v1h-2zM7 -6h2v1h-2zM-12 -5h2v1h-2zM-1 -5h2v1h-2zM7 -5h2v1h-2zM-13 -4h2v1h-2zM-1 -4h2v1h-2zM7 -4h2v1h-2zM-14 -3h2v1h-2zM-1 -3h2v1h-2zM7 -3h2v1h-2zM-15 -2h2v1h-2zM-1 -2h2v1h-2zM7 -2h2v1h-2zM-48 -1h34v1h-34zM-1 -1h2v1h-2zM7 -1h2v1h-2zM15 -1h33v1h-33zM-48 0h33v1h-33zM-1 0h2v1h-2zM7 0h2v1h-2zM15 0h33v1h-33zM-1 1h2v1h-2zM7 1h2v1h-2zM14 1h2v1h-2zM-1 2h2v1h-2zM7 2h2v1h-2zM13 2h2v1h-2zM-1 3h2v1h-2zM7 3h2v1h-2zM12 3h2v1h-2zM-1 4h2v1h-2zM7 4h2v1h-2zM11 4h2v1h-2zM-1 5h2v1h-2zM7 5h2v1h-2zM10 5h2v1h-2zM-1 6h2v1h-2zM7 6h4v1h-4zM-1 7h2v1h-2zM7 7h3v1h-3zM-1 8h2v1h-2zM7 8h2v1h-2zM-1 9h2v1h-2zM6 9h2v1h-2zM-1 10h2v1h-2zM5 10h2v1h-2zM-1 11h2v1h-2zM4 11h2v1h-2zM-1 12h2v1h-2zM3 12h2v1h-2zM-1 13h2v1h-2zM2 13h2v1h-2zM-1 14h4v1h-4zM-1 15h3v1h-3z"></path>
-      <rect x="48" y="-1" width="160" height="2" fill="#1F1D1A"></rect>
-      <text x="26" y="-3" font-family="Silkscreen, monospace" font-size="16" fill="#1F1D1A">ANALOGUE TOUCH</text>
+  <a class="logo" href="./" aria-label="Analogue Touch, accueil">
+    <svg aria-hidden="true" viewBox="-24 -18 236 36" shape-rendering="crispEdges">
+      <path fill="currentColor" d="M-1 -16h2v1h-2zM-2 -15h3v1h-3zM-3 -14h4v1h-4zM-4 -13h2v1h-2zM-1 -13h2v1h-2zM-5 -12h2v1h-2zM-1 -12h2v1h-2zM-6 -11h2v1h-2zM-1 -11h2v1h-2zM-7 -10h2v1h-2zM-1 -10h2v1h-2zM-8 -9h24v1h-24zM-9 -8h25v1h-25zM-10 -7h2v1h-2zM-1 -7h2v1h-2zM7 -7h2v1h-2zM-11 -6h2v1h-2zM-1 -6h2v1h-2zM7 -6h2v1h-2zM-12 -5h2v1h-2zM-1 -5h2v1h-2zM7 -5h2v1h-2zM-13 -4h2v1h-2zM-1 -4h2v1h-2zM7 -4h2v1h-2zM-14 -3h2v1h-2zM-1 -3h2v1h-2zM7 -3h2v1h-2zM-15 -2h2v1h-2zM-1 -2h2v1h-2zM7 -2h2v1h-2zM-48 -1h34v1h-34zM-1 -1h2v1h-2zM7 -1h2v1h-2zM15 -1h33v1h-33zM-48 0h33v1h-33zM-1 0h2v1h-2zM7 0h2v1h-2zM15 0h33v1h-33zM-1 1h2v1h-2zM7 1h2v1h-2zM14 1h2v1h-2zM-1 2h2v1h-2zM7 2h2v1h-2zM13 2h2v1h-2zM-1 3h2v1h-2zM7 3h2v1h-2zM12 3h2v1h-2zM-1 4h2v1h-2zM7 4h2v1h-2zM11 4h2v1h-2zM-1 5h2v1h-2zM7 5h2v1h-2zM10 5h2v1h-2zM-1 6h2v1h-2zM7 6h4v1h-4zM-1 7h2v1h-2zM7 7h3v1h-3zM-1 8h2v1h-2zM7 8h2v1h-2zM-1 9h2v1h-2zM6 9h2v1h-2zM-1 10h2v1h-2zM5 10h2v1h-2zM-1 11h2v1h-2zM4 11h2v1h-2zM-1 12h2v1h-2zM3 12h2v1h-2zM-1 13h2v1h-2zM2 13h2v1h-2zM-1 14h4v1h-4zM-1 15h3v1h-3z"></path>
+      <rect x="48" y="-1" width="160" height="2" fill="currentColor"></rect>
+      <text x="26" y="-3" font-family="Silkscreen, monospace" font-size="16" fill="currentColor">ANALOGUE TOUCH</text>
     </svg>
   </a>
 
   <nav aria-label="La régie" class="{{ classeRegie }}">
-    <button type="button" class="zone doux" onClick="{{ basculerEcoute }}" aria-pressed="{{ ecoutePresse }}" aria-label="Écouter la bande démo" style="left: 393px; top: 147px; width: 654px; height: 154px"><span class="forme" style="clip-path: path('M1 1 L90 1 L90 153 L1 153 Z M564 1 L653 1 L653 153 L564 153 Z')"></span><span class="etiquette" aria-hidden="true">{{ etiquetteEcoute }}</span></button>
-    <a href="#" class="zone" aria-disabled="true" style="left: 418px; top: 305px; width: 604px; height: 115px"><span class="forme" style="clip-path: path('M58 1 L546 1 L546 31 L58 31 Z M11 113 L593 113 L548 32 L56 32 Z M0 115 L604 115 L598 113 L6 113 Z')"></span><span class="etiquette">LA CONSOLE · BIENTÔT</span></a>
-    <button type="button" class="zone" onClick="{{ basculerEcoute }}" aria-pressed="{{ ecoutePresse }}" aria-label="Écouter la bande démo" style="left: 1141px; top: 249px; width: 203px; height: 155px"><span class="forme" style="clip-path: path('M9 8 L162 13 L153 154 L1 125 Z M153 154 L162 13 L202 12 L202 148 Z M9 8 L162 13 L202 12 L47 8 Z M143 47 L141 57 L136 66 L130 74 L122 81 L113 85 L103 87 L93 87 L84 84 L75 80 L68 74 L62 67 L57 59 L55 50 L54 41 L56 32 L60 23 L65 16 L72 9 L80 5 L89 2 L99 1 L109 2 L118 6 L127 11 L134 18 L139 27 L142 37 Z')"></span><span class="etiquette" aria-hidden="true">{{ etiquetteEcoute }}</span></button>
-    <a href="#" class="zone" aria-disabled="true" style="left: 1086px; top: 406px; width: 227px; height: 123px"><span class="forme" style="clip-path: path('M1 0 L227 57 L227 122 L1 49 Z')"></span><span class="etiquette">BIENTÔT</span></a>
-    <a href="#" class="zone" aria-disabled="true" style="left: 1086px; top: 374px; width: 227px; height: 86px"><span class="forme" style="clip-path: path('M1 0 L227 47 L227 86 L1 29 Z')"></span><span class="etiquette">SIX‑TRENTE · BIENTÔT</span></a>
-    <a href="#" class="zone dessous" aria-disabled="true" style="left: 1086px; top: 457px; width: 227px; height: 134px"><span class="forme" style="clip-path: path('M1 0 L227 75 L227 133 L1 44 Z')"></span><span class="etiquette">BIENTÔT</span></a>
-    <button type="button" class="zone {{ sonneGm }}" onClick="{{ allerGm }}" ref="{{ poserZoneGm }}" aria-label="Grand-mère" style="left: 28px; top: 296px; width: 248px; height: 101px"><span class="forme" style="clip-path: path('M0 16 L198 0 L248 67 L53 100 Z')"></span><span class="etiquette" aria-hidden="true">GRAND‑MÈRE →</span></button>
-    <button type="button" class="zone dessous {{ sonneRm }}" onClick="{{ allerRm }}" ref="{{ poserZoneRm }}" aria-label="Reine Mère" style="left: 34px; top: 384px; width: 304px; height: 114px"><span class="forme" style="clip-path: path('M1 49 L246 0 L303 46 L65 113 Z')"></span><span class="etiquette" aria-hidden="true">REINE MÈRE →</span></button>
-    <a href="#" class="zone dessous" aria-disabled="true" style="left: 94px; top: 472px; width: 277px; height: 121px"><span class="forme" style="clip-path: path('M1 75 L116 36 L174 48 L62 91 Z M62 91 L174 48 L174 75 L62 121 Z M135 30 L221 1 L276 10 L194 41 Z M194 41 L276 10 L276 33 L194 67 Z')"></span><span class="etiquette">HUIT · NEUF · BIENTÔT</span></a>
-    <button type="button" class="zone" onClick="{{ allerCarnet }}" ref="{{ poserZoneCarnet }}" aria-label="Le carnet de travail" style="left: 894px; top: 598px; width: 148px; height: 47px"><span class="forme" style="clip-path: path('M22 46 L148 46 L112 1 L0 1 Z')"></span><span class="etiquette" aria-hidden="true">LE CARNET DE TRAVAIL</span></button>
-    <button type="button" class="zone" onClick="{{ allerPourboire }}" aria-label="Laisser un pourboire" style="left: 990px; top: 526px; width: 89px; height: 115px"><span class="forme" style="clip-path: path('M1 1 L88 1 L88 114 L1 114 Z')"></span><span class="etiquette" aria-hidden="true">POURBOIRE</span></button>
+    <button type="button" class="zone {{ sonneGm }}" onClick="{{ allerGm }}" ref="{{ poserZoneGm }}" aria-label="Grand-mère" style="left: 28px; top: 296px; width: 248px; height: 101px"><span class="forme" style="clip-path: path('M0 16 L198 0 L248 67 L53 100 Z')"></span><span class="etiquette" aria-hidden="true">GRAND-MÈRE <span class="fl fl-d" aria-hidden="true"></span></span></button>
+    <button type="button" class="zone droite {{ sonneRm }}" onClick="{{ allerRm }}" ref="{{ poserZoneRm }}" aria-label="Reine Mère" style="left: 34px; top: 384px; width: 304px; height: 114px"><span class="forme" style="clip-path: path('M1 49 L246 0 L303 46 L65 113 Z')"></span><span class="etiquette" aria-hidden="true">REINE MÈRE <span class="fl fl-d" aria-hidden="true"></span></span></button>
+    <button type="button" class="zone doux" onClick="{{ basculerEcoute }}" aria-label="{{ nomEcoute }}" style="left: 393px; top: 147px; width: 91px; height: 154px"><span class="forme" style="clip-path: path('M1 1 L90 1 L90 153 L1 153 Z')"></span><span class="etiquette" aria-hidden="true">{{ etiquetteEcoute }}</span></button>
+    <div class="zone doux" onClick="{{ basculerEcoute }}" style="left: 956px; top: 147px; width: 91px; height: 154px"><span class="forme" style="clip-path: path('M1 1 L90 1 L90 153 L1 153 Z')"></span><span class="etiquette" aria-hidden="true">{{ etiquetteEcoute }}</span></div>
+    <button type="button" class="zone" onClick="{{ basculerEcoute }}" aria-label="{{ nomEcoute }}" style="left: 1141px; top: 249px; width: 203px; height: 155px"><span class="forme" style="clip-path: path('M9 8 L162 13 L153 154 L1 125 Z M153 154 L162 13 L202 12 L202 148 Z M9 8 L162 13 L202 12 L47 8 Z M143 47 L141 57 L136 66 L130 74 L122 81 L113 85 L103 87 L93 87 L84 84 L75 80 L68 74 L62 67 L57 59 L55 50 L54 41 L56 32 L60 23 L65 16 L72 9 L80 5 L89 2 L99 1 L109 2 L118 6 L127 11 L134 18 L139 27 L142 37 Z')"></span><span class="etiquette" aria-hidden="true">{{ etiquetteEcoute }}</span></button>
+    <button type="button" class="zone dessous" onClick="{{ allerCarnet }}" ref="{{ poserZoneCarnet }}" aria-label="Le carnet de travail" style="left: 894px; top: 598px; width: 148px; height: 47px"><span class="forme" style="clip-path: path('M22 46 L148 46 L112 1 L0 1 Z')"></span><span class="etiquette" aria-hidden="true">LE CARNET DE TRAVAIL <span class="fl fl-d" aria-hidden="true"></span></span></button>
+    <button type="button" class="zone" onClick="{{ allerPourboire }}" ref="{{ poserZonePourboire }}" aria-label="Le pot à pourboires" style="left: 990px; top: 526px; width: 89px; height: 115px"><span class="forme" style="clip-path: path('M1 1 L88 1 L88 114 L1 114 Z')"></span><span class="etiquette" aria-hidden="true">POURBOIRE <span class="fl fl-d" aria-hidden="true"></span></span></button>
+    <button type="button" class="zone doux bientot" onClick="{{ secouer }}" aria-disabled="true" aria-label="La console, bientôt" style="left: 418px; top: 305px; width: 604px; height: 115px"><span class="forme" style="clip-path: path('M58 1 L546 1 L546 31 L58 31 Z M11 113 L593 113 L548 32 L56 32 Z M0 115 L604 115 L598 113 L6 113 Z')"></span><span class="etiquette" aria-hidden="true">LA CONSOLE · BIENTÔT</span></button>
+    <button type="button" class="zone gauche doux bientot" onClick="{{ secouer }}" aria-disabled="true" aria-label="Six-Trente, bientôt" style="left: 1086px; top: 374px; width: 227px; height: 86px"><span class="forme" style="clip-path: path('M1 0 L227 47 L227 86 L1 29 Z')"></span><span class="etiquette" aria-hidden="true">SIX-TRENTE · BIENTÔT</span></button>
+    <button type="button" class="zone gauche doux bientot" onClick="{{ secouer }}" aria-disabled="true" aria-label="Le rack, bientôt" style="left: 1086px; top: 406px; width: 227px; height: 185px"><span class="forme" style="clip-path: path('M1 0 L227 57 L227 122 L1 49 Z M1 51 L227 126 L227 184 L1 95 Z')"></span><span class="etiquette" aria-hidden="true">LE RACK · BIENTÔT</span></button>
+    <button type="button" class="zone dessous doux bientot" onClick="{{ secouer }}" aria-disabled="true" aria-label="Huit et Neuf, bientôt" style="left: 94px; top: 472px; width: 277px; height: 121px"><span class="forme" style="clip-path: path('M1 75 L116 36 L174 48 L62 91 Z M62 91 L174 48 L174 75 L62 121 Z M135 30 L221 1 L276 10 L194 41 Z M194 41 L276 10 L276 33 L194 67 Z')"></span><span class="etiquette" aria-hidden="true">HUIT · NEUF · BIENTÔT</span></button>
   </nav>
 
   <section class="presentation {{ classePresGm }}" aria-label="Grand-mère" tabIndex="-1" ref="{{ poserPresentationGm }}">
+    <h2 class="lecteur">Grand-mère</h2>
     <div class="boitier" aria-hidden="true" style="left: 173px; top: 64px; width: 1094px; height: 640px"></div>
-    <button type="button" class="facade {{ classeFacadeGm }}" onClick="{{ basculerGm }}" aria-pressed="{{ presseGm }}" aria-label="Écouter Grand-mère" style="left: 195px; top: 68px; width: 1050px; height: 631px">
-      <img src="assets/facade-gm.webp" alt="" width="1050" height="631">
-    </button>
+    <div class="facade {{ classeFacadeGm }}" onClick="{{ basculerGm }}" style="left: 195px; top: 68px; width: 1050px; height: 631px">
+      <img src="assets/facade-gm.webp" alt="La façade de Grand-mère" width="1050" height="631">
+    </div>
     <p class="scotch numero" style="left: 1067px; top: 42px">N° 001 · BÊTA</p>
     <div class="actions">
-      <button type="button" class="scotch" onClick="{{ retourRegie }}">← LA RÉGIE</button>
-      <button type="button" class="scotch" onClick="{{ basculerGm }}" aria-pressed="{{ presseGm }}">{{ etiquetteGm }}</button>
-      <a class="scotch" href="#">TÉLÉCHARGER · GRATUIT</a>
-      <button type="button" class="scotch" onClick="{{ carnetInstaller }}">LE CARNET →</button>
+      <button type="button" class="scotch" onClick="{{ basculerGm }}">{{ etiquetteGm }}</button>
+      <span class="scotch indispo">TÉLÉCHARGER · BIENTÔT</span>
+      <button type="button" class="scotch" onClick="{{ carnetInstaller }}">INSTALLER <span class="fl fl-d" aria-hidden="true"></span></button>
     </div>
+    <button type="button" class="scotch retour" onClick="{{ retourRegie }}"><span class="fl fl-g" aria-hidden="true"></span> LA RÉGIE</button>
   </section>
   <section class="presentation {{ classePresRm }}" aria-label="Reine Mère" tabIndex="-1" ref="{{ poserPresentationRm }}">
+    <h2 class="lecteur">Reine Mère</h2>
     <div class="boitier" aria-hidden="true" style="left: 45px; top: 69px; width: 1350px; height: 594px"></div>
-    <button type="button" class="facade {{ classeFacadeRm }}" onClick="{{ basculerRm }}" aria-pressed="{{ presseRm }}" aria-label="Écouter Reine Mère" style="left: 75px; top: 73px; width: 1290px; height: 585px">
-      <img src="assets/facade-rm.webp" alt="" width="1290" height="585">
-    </button>
+    <div class="facade {{ classeFacadeRm }}" onClick="{{ basculerRm }}" style="left: 75px; top: 73px; width: 1290px; height: 585px">
+      <img src="assets/facade-rm.webp" alt="La façade de Reine Mère" width="1290" height="585">
+    </div>
     <p class="scotch numero" style="left: 1195px; top: 47px">N° 002 · BÊTA</p>
     <div class="actions">
-      <button type="button" class="scotch" onClick="{{ retourRegie }}">← LA RÉGIE</button>
-      <button type="button" class="scotch" onClick="{{ basculerRm }}" aria-pressed="{{ presseRm }}">{{ etiquetteRm }}</button>
-      <a class="scotch" href="#">TÉLÉCHARGER · GRATUIT</a>
-      <button type="button" class="scotch" onClick="{{ carnetInstaller }}">LE CARNET →</button>
+      <button type="button" class="scotch" onClick="{{ basculerRm }}">{{ etiquetteRm }}</button>
+      <span class="scotch indispo">TÉLÉCHARGER · BIENTÔT</span>
+      <button type="button" class="scotch" onClick="{{ carnetInstaller }}">INSTALLER <span class="fl fl-d" aria-hidden="true"></span></button>
     </div>
+    <button type="button" class="scotch retour" onClick="{{ retourRegie }}"><span class="fl fl-g" aria-hidden="true"></span> LA RÉGIE</button>
   </section>
 
   <section class="carnet {{ classeCarnet }}" aria-label="Le carnet de travail" tabIndex="-1" ref="{{ poserCarnet }}">
     <div class="feuilles" style="left: 211px; top: 73px; width: 1018px; height: 724px">
       <div class="double {{ classeF0 }}">
         <div class="page gauche">
-        <h2>LE CARNET DE TRAVAIL</h2>
+        <h2 tabindex="-1">LE CARNET DE TRAVAIL</h2>
         <p>Je m'appelle Touf. Je refais en plugin, d'après leur circuit, des synthés et des machines de studio que j'aime, avec l'IA. C'est gratuit, sans compte, et tout le code est public.</p>
         <p>Ce carnet garde tout ce qui ne tient pas sur une façade : comment les installer, comment elles sont faites, et ce qui a changé.</p>
         <p class="signature">Fait par Touf. À écouter au casque.</p>
@@ -242,19 +268,19 @@ html,body{height:100%;overflow:hidden}
         <div class="page droite">
         <h2>DANS CE CARNET</h2>
         <ol class="sommaire">
-          <li><button type="button" class="lien" onClick="{{ ouvrirF1 }}">Installer, sur Windows</button><span class="folio-lien">P. 3</span></li>
-          <li><button type="button" class="lien" onClick="{{ ouvrirF2 }}">La méthode</button><span class="folio-lien">P. 5</span></li>
-          <li><button type="button" class="lien" onClick="{{ ouvrirF3 }}">Le journal</button><span class="folio-lien">P. 7</span></li>
-          <li><button type="button" class="lien" onClick="{{ ouvrirF4 }}">Soutenir</button><span class="folio-lien">P. 9</span></li>
+          <li><button type="button" class="lien" onClick="{{ lireF1 }}">Installer, sur Windows</button><span class="folio-lien">P. 3</span></li>
+          <li><button type="button" class="lien" onClick="{{ lireF2 }}">La méthode</button><span class="folio-lien">P. 5</span></li>
+          <li><button type="button" class="lien" onClick="{{ lireF3 }}">Le journal</button><span class="folio-lien">P. 7</span></li>
+          <li><button type="button" class="lien" onClick="{{ lireF4 }}">Le pourboire</button><span class="folio-lien">P. 9</span></li>
         </ol>
         <p class="note">Le code et les mesures sont faits avec Claude, une IA. J'écoute le son et je relis les textes. Les façades et ces pixels sont dessinés par des programmes écrits avec Claude.</p>
         <span class="folio" aria-hidden="true">2</span></div>
       </div>
       <div class="double {{ classeF1 }}">
         <div class="page gauche">
-        <h2>INSTALLER, SUR WINDOWS</h2>
+        <h2 tabindex="-1">INSTALLER, SUR WINDOWS</h2>
         <ol>
-          <li>Télécharge le zip de la bêta.</li>
+          <li>Télécharge le zip de la bêta <span class="indispo">(les téléchargements arrivent bientôt)</span>.</li>
           <li>Dézippe-le : tu obtiens un dossier <b>Grandmere.vst3</b> ou <b>Reine Mere.vst3</b>.</li>
           <li>Copie ce dossier entier dans :<br><span class="chemin">C:\Program Files\Common Files\VST3</span><br>Windows peut te demander d'être administrateur pour écrire dans ce dossier.</li>
           <li>Relance la recherche de plugins dans ton logiciel de musique.</li>
@@ -266,13 +292,13 @@ html,body{height:100%;overflow:hidden}
         <ul>
           <li>Vérifie que tu as copié le dossier .vst3 entier, pas seulement ce qu'il contient.</li>
           <li>Vérifie dans les réglages de ton logiciel qu'il cherche bien les plugins VST3 dans ce dossier.</li>
-          <li>Sinon, <a href="https://github.com/analogue-touch" target="_blank" rel="noopener">signale le problème sur GitHub ↗</a> : dis-moi ton logiciel et ta version de Windows.</li>
+          <li>Sinon, <a href="https://github.com/analogue-touch" target="_blank" rel="noopener">signale le problème sur GitHub <span class="fl fl-hd" aria-hidden="true"></span><span class="lecteur"> (nouvel onglet)</span></a> : dis-moi ton logiciel et ta version de Windows.</li>
         </ul>
         <span class="folio" aria-hidden="true">4</span></div>
       </div>
       <div class="double {{ classeF2 }}">
         <div class="page gauche">
-        <h2>D'APRÈS LE CIRCUIT</h2>
+        <h2 tabindex="-1">D'APRÈS LE CIRCUIT</h2>
         <ol>
           <li><b>Le schéma.</b> Je pars du schéma publié et du manuel de la machine, jamais de son code.</li>
           <li><b>Le circuit en code.</b> Chaque étage est réécrit composant par composant, avec l'IA.</li>
@@ -284,24 +310,25 @@ html,body{height:100%;overflow:hidden}
         <h2>CE QU'IL FAUT SAVOIR</h2>
         <p>Ce n'est pas un produit officiel ni une copie du code d'origine : aucun lien avec les fabricants. C'est une bêta, faite avec Claude, une IA, puis écoutée et relue par moi.</p>
         <p><b>Ce que l'IA a coûté :</b> [jetons à relever].</p>
-        <p>Grand‑mère tourne sur 5,6 % d'un cœur de processeur à 48 kHz, mesuré le 18/11/2026.</p>
-        <p><a href="https://github.com/analogue-touch" target="_blank" rel="noopener">Le code, les mesures et les décisions sont sur GitHub ↗</a></p>
+        <p><span class="mot">Grand-mère</span> tourne sur 5,6 % d'un cœur de processeur à 48 kHz, mesuré le 18/11/2026.</p>
+        <p><a href="https://github.com/analogue-touch" target="_blank" rel="noopener">Le code, les mesures et les décisions sont sur GitHub <span class="fl fl-hd" aria-hidden="true"></span><span class="lecteur"> (nouvel onglet)</span></a></p>
         <span class="folio" aria-hidden="true">6</span></div>
       </div>
       <div class="double {{ classeF3 }}">
         <div class="page gauche">
-        <h2>LE JOURNAL</h2>
+        <h2 tabindex="-1">LE JOURNAL</h2>
         <ul class="journal">
           <li><span class="date">12/11/2026</span>La collection s'appelle Analogue Touch.</li>
           <li><span class="date">12/11/2026</span>Les façades passent en pixel art, aux teintes d'origine. Le son ne change pas d'un bit.</li>
           <li><span class="date">18/11/2026</span>Le logo : un seul cycle de dent de scie, qui écrit A et T.</li>
           <li><span class="date">18/11/2026</span>Le code est public, sous licence AGPLv3.</li>
-          <li><span class="date">18/11/2026</span>Première sortie : Grand‑mère et Reine Mère, en bêta.</li>
+          <li><span class="date">18/11/2026</span>Première sortie : <span class="mot">Grand-mère</span> et Reine Mère, en bêta.</li>
           <li><span class="date">19/11/2026</span>Le site devient une régie de studio.</li>
         </ul>
         <span class="folio" aria-hidden="true">7</span></div>
         <div class="page droite">
-        <h2>GRAND‑MÈRE</h2>
+        <h2>PAR MACHINE</h2>
+        <h3>GRAND-MÈRE</h3>
         <ul class="journal">
           <li><span class="date">12/11/2026</span>Version 5 : trois changements choisis à l'oreille.</li>
           <li><span class="date">18/11/2026</span>Coût mesuré : 5,6 % d'un cœur de processeur à 48 kHz.</li>
@@ -310,21 +337,21 @@ html,body{height:100%;overflow:hidden}
         <ul class="journal">
           <li><span class="date">10/11/2026</span>Version 4 : 63 réglages.</li>
         </ul>
-        <p><a href="https://github.com/analogue-touch" target="_blank" rel="noopener">Le journal complet sur GitHub ↗</a></p>
+        <p><a href="https://github.com/analogue-touch" target="_blank" rel="noopener">Le journal complet sur GitHub <span class="fl fl-hd" aria-hidden="true"></span><span class="lecteur"> (nouvel onglet)</span></a></p>
         <span class="folio" aria-hidden="true">8</span></div>
       </div>
       <div class="double {{ classeF4 }}">
         <div class="page gauche">
-        <h2>UN POURBOIRE, PAS UN PRIX</h2>
+        <h2 tabindex="-1">UN POURBOIRE, PAS UN PRIX</h2>
         <p>Les plugins sont gratuits, sans compte, et le code est public. Si tu veux m'aider à en refaire d'autres, tu peux me laisser un pourboire. Il ne débloque rien : c'est un merci.</p>
         <p>Signaler un problème aide aussi.</p>
         <span class="folio" aria-hidden="true">9</span></div>
         <div class="page droite">
         <h2>OÙ ÇA SE PASSE</h2>
         <ul>
-          <li><a href="#">Laisser un pourboire ↗</a> sur Ko‑fi, à la page « Touf - Analogue-touch ».</li>
-          <li><a href="https://github.com/analogue-touch" target="_blank" rel="noopener">Signaler un problème ↗</a> sur GitHub.</li>
-          <li><a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener">Le code, sous licence AGPLv3 ↗</a></li>
+          <li>Le pourboire passera par <span class="mot">Ko-fi</span>, à la page « Touf - <span class="mot">Analogue-touch</span> » <span class="indispo">(bientôt en ligne)</span>.</li>
+          <li><a href="https://github.com/analogue-touch" target="_blank" rel="noopener">Signaler un problème <span class="fl fl-hd" aria-hidden="true"></span><span class="lecteur"> (nouvel onglet)</span></a> sur GitHub.</li>
+          <li><a href="https://github.com/analogue-touch" target="_blank" rel="noopener">Le code <span class="fl fl-hd" aria-hidden="true"></span><span class="lecteur"> (nouvel onglet)</span></a>, sous <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener">licence AGPLv3 <span class="fl fl-hd" aria-hidden="true"></span><span class="lecteur"> (nouvel onglet)</span></a>.</li>
         </ul>
         <p class="note">Les machines d'origine appartiennent à leurs fabricants. Aucun lien avec eux.</p>
         <span class="folio" aria-hidden="true">10</span></div>
@@ -333,24 +360,17 @@ html,body{height:100%;overflow:hidden}
     <nav class="onglets" aria-label="Les pages du carnet" style="left: 1213px; top: 113px">
       <button type="button" class="onglet {{ classeOngletF0 }}" onClick="{{ ouvrirF0 }}" aria-current="{{ courantF0 }}">SOMMAIRE</button>
       <button type="button" class="onglet {{ classeOngletF1 }}" onClick="{{ ouvrirF1 }}" aria-current="{{ courantF1 }}">INSTALLER</button>
-      <button type="button" class="onglet {{ classeOngletF2 }}" onClick="{{ ouvrirF2 }}" aria-current="{{ courantF2 }}">LA MÉTHODE</button>
-      <button type="button" class="onglet {{ classeOngletF3 }}" onClick="{{ ouvrirF3 }}" aria-current="{{ courantF3 }}">LE JOURNAL</button>
-      <button type="button" class="onglet {{ classeOngletF4 }}" onClick="{{ ouvrirF4 }}" aria-current="{{ courantF4 }}">SOUTENIR</button>
+      <button type="button" class="onglet {{ classeOngletF2 }}" onClick="{{ ouvrirF2 }}" aria-current="{{ courantF2 }}">MÉTHODE</button>
+      <button type="button" class="onglet {{ classeOngletF3 }}" onClick="{{ ouvrirF3 }}" aria-current="{{ courantF3 }}">JOURNAL</button>
+      <button type="button" class="onglet {{ classeOngletF4 }}" onClick="{{ ouvrirF4 }}" aria-current="{{ courantF4 }}">POURBOIRE</button>
     </nav>
-    <button type="button" class="scotch retour" onClick="{{ retourRegie }}">← LA RÉGIE</button>
+    <button type="button" class="scotch retour" onClick="{{ retourRegie }}"><span class="fl fl-g" aria-hidden="true"></span> LA RÉGIE</button>
   </section>
 </div>
 </main>
 </div>
 </div>
-  <a class="logo-mobile" href="./" aria-label="Analogue Touch, accueil" style="position: absolute; left: 24px; top: 20px; display: block; padding: 8px 14px; transform: rotate(-1deg); background: linear-gradient(180deg,rgba(255,255,255,0.22) 0,rgba(255,255,255,0.22) 2px,rgba(0,0,0,0) 2px,rgba(0,0,0,0) calc(100% - 3px),rgba(90,70,40,0.22) calc(100% - 3px)),repeating-linear-gradient(90deg,rgba(255,255,255,0.08) 0,rgba(255,255,255,0.08) 3px,rgba(110,90,50,0.06) 3px,rgba(110,90,50,0.06) 6px),rgba(231,219,182,0.94); clip-path: polygon(0 0,100% 0,calc(100% - 3px) 14%,100% 28%,calc(100% - 3px) 42%,100% 57%,calc(100% - 3px) 71%,100% 85%,calc(100% - 3px) 100%,0 100%,3px 86%,0 72%,3px 58%,0 43%,3px 29%,0 15%)">
-    <svg aria-hidden="true" viewBox="-24 -18 236 36" shape-rendering="crispEdges" style="display: block; width: 236px; height: 36px">
-      <path fill="#1F1D1A" d="M-1 -16h2v1h-2zM-2 -15h3v1h-3zM-3 -14h4v1h-4zM-4 -13h2v1h-2zM-1 -13h2v1h-2zM-5 -12h2v1h-2zM-1 -12h2v1h-2zM-6 -11h2v1h-2zM-1 -11h2v1h-2zM-7 -10h2v1h-2zM-1 -10h2v1h-2zM-8 -9h24v1h-24zM-9 -8h25v1h-25zM-10 -7h2v1h-2zM-1 -7h2v1h-2zM7 -7h2v1h-2zM-11 -6h2v1h-2zM-1 -6h2v1h-2zM7 -6h2v1h-2zM-12 -5h2v1h-2zM-1 -5h2v1h-2zM7 -5h2v1h-2zM-13 -4h2v1h-2zM-1 -4h2v1h-2zM7 -4h2v1h-2zM-14 -3h2v1h-2zM-1 -3h2v1h-2zM7 -3h2v1h-2zM-15 -2h2v1h-2zM-1 -2h2v1h-2zM7 -2h2v1h-2zM-48 -1h34v1h-34zM-1 -1h2v1h-2zM7 -1h2v1h-2zM15 -1h33v1h-33zM-48 0h33v1h-33zM-1 0h2v1h-2zM7 0h2v1h-2zM15 0h33v1h-33zM-1 1h2v1h-2zM7 1h2v1h-2zM14 1h2v1h-2zM-1 2h2v1h-2zM7 2h2v1h-2zM13 2h2v1h-2zM-1 3h2v1h-2zM7 3h2v1h-2zM12 3h2v1h-2zM-1 4h2v1h-2zM7 4h2v1h-2zM11 4h2v1h-2zM-1 5h2v1h-2zM7 5h2v1h-2zM10 5h2v1h-2zM-1 6h2v1h-2zM7 6h4v1h-4zM-1 7h2v1h-2zM7 7h3v1h-3zM-1 8h2v1h-2zM7 8h2v1h-2zM-1 9h2v1h-2zM6 9h2v1h-2zM-1 10h2v1h-2zM5 10h2v1h-2zM-1 11h2v1h-2zM4 11h2v1h-2zM-1 12h2v1h-2zM3 12h2v1h-2zM-1 13h2v1h-2zM2 13h2v1h-2zM-1 14h4v1h-4zM-1 15h3v1h-3z"></path>
-      <rect x="48" y="-1" width="160" height="2" fill="#1F1D1A"></rect>
-      <text x="26" y="-3" font-family="Silkscreen, monospace" font-size="16" fill="#1F1D1A">ANALOGUE TOUCH</text>
-    </svg>
-  </a>
-<p class="scotch glisse" id="glisse" aria-hidden="true">← GLISSE POUR REGARDER →</p>
+<p class="scotch glisse" id="glisse" aria-hidden="true"><span class="fl fl-g"></span> GLISSE POUR REGARDER <span class="fl fl-d"></span></p>
 <script src="dc-autonome.js"></script>
 <script>
 // La régie est une seule page. Un clic sur un synthé fait avancer la caméra jusqu'à lui (des images
@@ -362,10 +382,10 @@ html,body{height:100%;overflow:hidden}
 // Le niveau de chaque extrait est calculé d'avance (un chiffre de 0 à 7 toutes les 50 ms, avec la retombée
 // d'un vumètre) : la page le lit en face du temps de lecture, sans analyser le son dans le navigateur.
 const PISTES = [
-  { src: 'assets/son-gm-basse.mp4', titre: 'GRAND‑MÈRE · BASSE', machine: 'gm', niveaux: '344445554455544555445554455544555445554455544555445554455544554445554455444554443221111100' },
-  { src: 'assets/son-rm-accords.mp4', titre: 'REINE MÈRE · ACCORDS', machine: 'rm', niveaux: '35566666666666666666666666666666666666666666666666666666666665554443332222111110' },
-  { src: 'assets/son-gm-sequence.mp4', titre: 'GRAND‑MÈRE · SÉQUENCE', machine: 'gm', niveaux: '4555566566654432455543324555665555566666655555666665545555556565555455555555554555555555445555555433' },
-  { src: 'assets/son-rm-sequence.mp4', titre: 'REINE MÈRE · SÉQUENCE D’ACCORDS', machine: 'rm', niveaux: '345543555543322111103455543221454334555543221455434554344555432214554345543455554322145543455434455543221455434554344322' }
+  { src: 'assets/son-gm-basse.mp4', titre: 'GRAND-MÈRE · BASSE', lu: 'Grand-mère, basse', machine: 'gm', niveaux: '344445554455544555445554455544555445554455544555445554455544554445554455444554443221111100' },
+  { src: 'assets/son-rm-accords.mp4', titre: 'REINE MÈRE · ACCORDS', lu: 'Reine Mère, accords', machine: 'rm', niveaux: '35566666666666666666666666666666666666666666666666666666666665554443332222111110' },
+  { src: 'assets/son-gm-sequence.mp4', titre: 'GRAND-MÈRE · SÉQUENCE', lu: 'Grand-mère, séquence', machine: 'gm', niveaux: '4555566566654432455543324555665555566666655555666665545555556565555455555555554555555555445555555433' },
+  { src: 'assets/son-rm-sequence.mp4', titre: 'REINE MÈRE · SÉQUENCE D’ACCORDS', lu: 'Reine Mère, séquence d’accords', machine: 'rm', niveaux: '345543555543322111103455543221454334555543221455434554344555432214554345543455554322145543455434455543221455434554344322' }
 ];
 const MACHINES = { gm: [0, 2], rm: [1, 3] };
 const LARGEUR_NIVEAU = 895.5;
@@ -389,24 +409,41 @@ class Component extends DCLogic {
     this.poserPresentationGm = (el) => { this.elPres.gm = el; };
     this.poserZoneGm = (el) => { this.elZone.gm = el; };
     this.basculerGm = () => this.basculerListe(MACHINES.gm);
-    this.allerGm = () => this.voyager('gm', 'aller');
+    this.allerGm = () => this.partir('gm', 'gm');
     this.poserPresentationRm = (el) => { this.elPres.rm = el; };
     this.poserZoneRm = (el) => { this.elZone.rm = el; };
     this.basculerRm = () => this.basculerListe(MACHINES.rm);
-    this.allerRm = () => this.voyager('rm', 'aller');
+    this.allerRm = () => this.partir('rm', 'rm');
     this.ouvrirF0 = () => this.setState({ feuille: 0 });
+    this.lireF0 = () => this.setState({ feuille: 0 }, () => this.focusPage());
     this.ouvrirF1 = () => this.setState({ feuille: 1 });
+    this.lireF1 = () => this.setState({ feuille: 1 }, () => this.focusPage());
     this.ouvrirF2 = () => this.setState({ feuille: 2 });
+    this.lireF2 = () => this.setState({ feuille: 2 }, () => this.focusPage());
     this.ouvrirF3 = () => this.setState({ feuille: 3 });
+    this.lireF3 = () => this.setState({ feuille: 3 }, () => this.focusPage());
     this.ouvrirF4 = () => this.setState({ feuille: 4 });
+    this.lireF4 = () => this.setState({ feuille: 4 }, () => this.focusPage());
     this.poserCarnet = (el) => { this.elPres.carnet = el; };
     this.poserZoneCarnet = (el) => { this.elZone.carnet = el; };
-    this.allerCarnet = () => this.voyager('carnet', 'aller');
-    this.allerPourboire = () => { this.setState({ feuille: 4 }); this.voyager('carnet', 'aller'); };
+    this.poserZonePourboire = (el) => { this.elZone.pourboire = el; };
+    this.allerCarnet = () => this.partir('carnet', 'carnet');
+    this.allerPourboire = () => { if (this.voyage) return; this.setState({ feuille: 4 }); this.partir('carnet', 'pourboire'); };
     // depuis une machine : la caméra revient au fauteuil, puis se penche sur le carnet, ouvert à « Installer »
     this.carnetInstaller = () => {
-      if (this.state.vue === 'regie') { this.setState({ feuille: 1 }); this.voyager('carnet', 'aller'); return; }
-      this.voyager(this.machine, 'retour', () => { this.setState({ feuille: 1 }); this.voyager('carnet', 'aller'); });
+      const ouvrir = () => { this.setState({ feuille: 1 }); this.partir('carnet', 'carnet'); };
+      if (this.state.vue === 'regie') { ouvrir(); return; }
+      this.voyager(this.machine, 'retour', ouvrir);
+    };
+    // un objet « bientôt » : son scotch tremble, rien d'autre
+    this.secouer = (e) => {
+      const z = e && e.currentTarget;
+      if (!z || !z.classList) return;
+      z.classList.remove('secoue');
+      void z.offsetWidth;
+      z.classList.add('secoue');
+      clearTimeout(z.__secoue);
+      z.__secoue = setTimeout(() => z.classList.remove('secoue'), 400);
     };
     this.basculer = () => this.basculerListe([0, 1, 2, 3]);
     this.retourRegie = () => this.voyager(this.machine, 'retour');
@@ -431,6 +468,16 @@ class Component extends DCLogic {
   componentWillUnmount() {
     this.arreter();
     if (this.voyage) cancelAnimationFrame(this.voyage);
+  }
+  partir(machine, zone) {
+    // la zone de départ est retenue : au retour, le focus y revient
+    if (this.voyage) return;
+    this.origine = zone;
+    this.voyager(machine, 'aller');
+  }
+  focusPage() {
+    const h = this.elPres.carnet && this.elPres.carnet.querySelector('.double.ouverte h2');
+    if (h) h.focus();
   }
   reduit() {
     return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -476,7 +523,7 @@ class Component extends DCLogic {
     const ensuite = this.ensuite;
     this.ensuite = null;
     this.setState({ vue: sens === 'aller' ? m : 'regie' }, () => {
-      const cible = sens === 'aller' ? this.elPres[m] : this.elZone[m];
+      const cible = sens === 'aller' ? this.elPres[m] : (this.elZone[this.origine] || this.elZone[m]);
       if (cible && cible.focus) cible.focus();
       if (ensuite) ensuite();
     });
@@ -513,11 +560,12 @@ class Component extends DCLogic {
     return {
       basculerEcoute: this.basculer,
       retourRegie: this.retourRegie,
-      ecoutePresse: joue && enRegie ? 'true' : 'false',
+      nomEcoute: joue ? 'Arrêter la bande démo' : 'Écouter la bande démo',
       etiquetteEcoute: joue ? 'ARRÊTER' : 'ÉCOUTER',
       classeLecture: joue && enRegie ? 'joue' : '',
       classeTitre: joue ? 'joue' : '',
       titreLecture: joue ? PISTES[piste].titre + ' · ' + (this.rang + 1) + '/' + this.liste.length : '',
+      titreLu: joue ? 'En lecture : ' + PISTES[piste].lu + ', piste ' + (this.rang + 1) + ' sur ' + this.liste.length : '',
       classeRegie: enRegie ? '' : 'cache',
       classeVue: 'vue-' + vue,
       classeTrajet: enRegie ? '' : 'visible ' + this.machine,
@@ -529,29 +577,35 @@ class Component extends DCLogic {
       carnetInstaller: this.carnetInstaller,
       poserCarnet: this.poserCarnet,
       poserZoneCarnet: this.poserZoneCarnet,
+      poserZonePourboire: this.poserZonePourboire,
+      secouer: this.secouer,
       ouvrirF0: this.ouvrirF0,
+      lireF0: this.lireF0,
       classeF0: this.state.feuille === 0 ? 'ouverte' : '',
       classeOngletF0: this.state.feuille === 0 ? 'actif' : '',
       courantF0: this.state.feuille === 0 ? 'page' : 'false',
       ouvrirF1: this.ouvrirF1,
+      lireF1: this.lireF1,
       classeF1: this.state.feuille === 1 ? 'ouverte' : '',
       classeOngletF1: this.state.feuille === 1 ? 'actif' : '',
       courantF1: this.state.feuille === 1 ? 'page' : 'false',
       ouvrirF2: this.ouvrirF2,
+      lireF2: this.lireF2,
       classeF2: this.state.feuille === 2 ? 'ouverte' : '',
       classeOngletF2: this.state.feuille === 2 ? 'actif' : '',
       courantF2: this.state.feuille === 2 ? 'page' : 'false',
       ouvrirF3: this.ouvrirF3,
+      lireF3: this.lireF3,
       classeF3: this.state.feuille === 3 ? 'ouverte' : '',
       classeOngletF3: this.state.feuille === 3 ? 'actif' : '',
       courantF3: this.state.feuille === 3 ? 'page' : 'false',
       ouvrirF4: this.ouvrirF4,
+      lireF4: this.lireF4,
       classeF4: this.state.feuille === 4 ? 'ouverte' : '',
       classeOngletF4: this.state.feuille === 4 ? 'actif' : '',
       courantF4: this.state.feuille === 4 ? 'page' : 'false',
       basculerGm: this.basculerGm,
       allerGm: this.allerGm,
-      presseGm: joue && vue === 'gm' ? 'true' : 'false',
       etiquetteGm: joue ? 'ARRÊTER' : 'ÉCOUTER',
       sonneGm: machine === 'gm' && enRegie ? 'sonne' : '',
       classeFacadeGm: joue && vue === 'gm' ? 'sonne' : '',
@@ -560,7 +614,6 @@ class Component extends DCLogic {
       poserZoneGm: this.poserZoneGm,
       basculerRm: this.basculerRm,
       allerRm: this.allerRm,
-      presseRm: joue && vue === 'rm' ? 'true' : 'false',
       etiquetteRm: joue ? 'ARRÊTER' : 'ÉCOUTER',
       sonneRm: machine === 'rm' && enRegie ? 'sonne' : '',
       classeFacadeRm: joue && vue === 'rm' ? 'sonne' : '',
@@ -571,16 +624,70 @@ class Component extends DCLogic {
   }
 }
 const planche = monterPlanche(document.getElementById('ecran'), Component);
-const TITRES = { regie: 'Analogue Touch · la régie', gm: 'Grand-mère · Analogue Touch', rm: 'Reine Mère · Analogue Touch', carnet: 'Le carnet de travail · Analogue Touch' };
-// Échap ramène dans la régie (sur le site seulement : la planche de Claude Design n'en veut pas)
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && ['gm', 'rm', 'carnet'].includes(planche.state.vue)) planche.retourRegie();
-});
-
+const TITRES = { regie: 'La régie · Analogue Touch', gm: 'Grand-mère · Analogue Touch', rm: 'Reine Mère · Analogue Touch', carnet: 'Le carnet de travail · Analogue Touch' };
+const ADRESSES = { gm: 'grand-mere', rm: 'reine-mere', carnet: 'carnet' };
+const VUES = {};
+for (const v in ADRESSES) VUES[ADRESSES[v]] = v;
+const FICHES = Object.keys(ADRESSES);
 const defile = document.getElementById('defile');
 const ecranEl = document.getElementById('ecran');
 const debout = () => window.innerWidth < window.innerHeight;
 const centrer = (doux) => defile.scrollTo({ left: (defile.scrollWidth - defile.clientWidth) / 2, behavior: doux ? 'smooth' : 'auto' });
+const centrerSur = (el, doux) => {
+  const r = el.getBoundingClientRect(), d = defile.getBoundingClientRect();
+  defile.scrollTo({ left: defile.scrollLeft + r.left + r.width / 2 - d.left - defile.clientWidth / 2, behavior: doux ? 'smooth' : 'auto' });
+};
+
+// les trajets : chargés après la page, ou dès qu'on s'approche d'un objet
+const TRAJETS = { gm: 'assets/trajet-gm.webp', rm: 'assets/trajet-rm.webp', carnet: 'assets/trajet-carnet.webp' };
+const precharges = {};
+function precharger(d) {
+  if (!precharges[d]) { precharges[d] = new Image(); precharges[d].src = TRAJETS[d]; }
+  return precharges[d];
+}
+const toutPrecharger = () => Object.keys(TRAJETS).forEach(precharger);
+window.addEventListener('load', () => setTimeout(toutPrecharger, 1500));
+for (const t of ['pointerover', 'focusin', 'touchstart']) ecranEl.addEventListener(t, toutPrecharger, { once: true, passive: true });
+
+// Échap ramène dans la régie (sur le site seulement : la planche de Claude Design n'en veut pas)
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && FICHES.includes(planche.state.vue)) planche.retourRegie();
+});
+// le logo : depuis une machine ou le carnet, il ramène à la régie par le même chemin que « La régie »
+for (const a of document.querySelectorAll('a.logo')) a.addEventListener('click', (e) => {
+  e.preventDefault();
+  const v = planche.state.vue;
+  if (FICHES.includes(v)) planche.retourRegie();
+  else if (v === 'regie' && debout()) centrer(true);
+});
+
+// L'adresse suit la caméra (#grand-mere, #reine-mere, #carnet) : Précédent et le geste retour du téléphone
+// ramènent à la régie, et un lien vers #grand-mere fait entrer par le fauteuil puis avancer jusqu'à elle.
+const depart = VUES[location.hash.slice(1)];
+if (depart) history.replaceState(null, '', location.pathname + location.search);
+let ignorerRetour = false;
+function suivreAdresse(v) {
+  if (ADRESSES[v]) {
+    const h = '#' + ADRESSES[v];
+    if (location.hash === h) return;
+    if (history.state && history.state.vue) history.replaceState({ vue: v }, '', h);
+    else history.pushState({ vue: v }, '', h);
+  } else if (v === 'regie') {
+    if (history.state && history.state.vue) { ignorerRetour = true; history.back(); }
+    else if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  }
+}
+window.addEventListener('popstate', () => {
+  if (ignorerRetour) { ignorerRetour = false; return; }
+  const cible = VUES[location.hash.slice(1)] || 'regie';
+  const v = planche.state.vue;
+  if (cible === v) return;
+  if (cible === 'regie') { if (FICHES.includes(v)) planche.retourRegie(); return; }
+  precharger(cible);
+  if (v === 'regie') planche.partir(cible, cible);
+  else if (FICHES.includes(v)) planche.voyager(v, 'retour', () => planche.partir(cible, cible));
+});
+
 // la scène garde ses proportions : elle tient dans la fenêtre ; debout, on la fait glisser
 function ajuster() {
   // debout : la régie prend environ les deux tiers de la hauteur, à un nombre entier de pixels d'écran par pixel de la scène
@@ -595,11 +702,18 @@ function suivreVue() {
   const avant = vue;
   vue = v;
   if (TITRES[v]) document.title = TITRES[v];
-  const fiche = ['gm', 'rm', 'carnet'].includes(v);
+  if (v === 'aller') document.querySelectorAll('.zone[data-choisie]').forEach((x) => delete x.dataset.choisie);
+  suivreAdresse(v);
+  const fiche = FICHES.includes(v);
   defile.classList.toggle('fiche', fiche);
   if (fiche) defile.scrollTo(0, 0);
-  else if (debout() && (v === 'aller' || (v === 'regie' && avant === 'retour'))) centrer(true);
+  else if (debout() && v === 'aller') centrer(true);
   else if (debout() && v === 'retour') requestAnimationFrame(() => centrer(false));
+  else if (debout() && v === 'regie' && avant === 'retour') {
+    // de retour au fauteuil : la régie glisse jusqu'à l'objet qu'on vient de quitter
+    const z = planche.elZone[planche.origine];
+    if (z) centrerSur(z, true); else centrer(true);
+  }
 }
 new MutationObserver(suivreVue).observe(ecranEl, { attributes: true, attributeFilter: ['class'] });
 // au doigt, sans survol : un premier appui montre le nom de l'objet, le second y va
@@ -619,6 +733,12 @@ suivreVue();
 if (debout()) centrer(false);
 // le mot « glisse » s'efface dès que le doigt (ou la molette) touche la régie, pas au centrage du départ
 for (const t of ['touchstart', 'pointerdown', 'wheel']) defile.addEventListener(t, () => document.getElementById('glisse').classList.add('vu'), { once: true, passive: true });
+// arrivé par un lien vers une machine ou le carnet : on s'assoit, puis la caméra y va
+if (depart) {
+  const img = precharger(depart);
+  const y_aller = () => setTimeout(() => planche.partir(depart, depart), 400);
+  if (img.complete) y_aller(); else { img.onload = y_aller; img.onerror = y_aller; }
+}
 </script>
 </body>
 </html>
